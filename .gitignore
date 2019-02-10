@@ -13,3 +13,9 @@ export_presets.cfg
 .mono/
 
 # End of https://www.gitignore.io/api/godot
+.import/**
+
+reference/**
+
+*.stex
+*.md5
