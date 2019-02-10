@@ -34,12 +34,9 @@ texture = ExtResource( 2 )
 expand = true
 
 [node name="MarginContainer2" type="MarginContainer" parent="IconBar"]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -32.0
-margin_top = -32.0
+margin_left = 36.0
+margin_right = 68.0
+margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
 
 [node name="PinIcon" type="TextureRect" parent="IconBar/MarginContainer2"]

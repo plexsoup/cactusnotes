@@ -60,7 +60,7 @@ func spawnNote(id, title, text, pinStatus, newPosition):
 func _on_BaseCactus_gui_input(event):
 	tmp = event
 	if Input.is_action_just_pressed("spawn_note"):
-		spawnNote(null, "", "", "free", null)
+		spawnNote(null, "", "", 1, null)
 
 
 
