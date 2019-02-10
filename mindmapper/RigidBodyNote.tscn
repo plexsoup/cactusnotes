@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://RigidBodyNote.gd" type="Script" id=1]
+[ext_resource path="res://icons/cactusicon.png" type="Texture" id=2]
+[ext_resource path="res://WindowDialog.tscn" type="PackedScene" id=3]
+
+[sub_resource type="RectangleShape2D" id=1]
+
+extents = Vector2( 87.4005, 68.811 )
+
+[node name="RigidBodyNote" type="RigidBody2D"]
+can_sleep = false
+script = ExtResource( 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0.0180359, 0.282776 )
+shape = SubResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( -3.66106, -16.5695 )
+scale = Vector2( 1.0047, 1.0047 )
+texture = ExtResource( 2 )
+
+[node name="WindowDialog" parent="." instance=ExtResource( 3 )]
+margin_left = -98.2852
+margin_top = -81.41
+margin_right = 101.715
+margin_bottom = 68.59
+

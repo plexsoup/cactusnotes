@@ -1,0 +1,85 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://WindowDialog.gd" type="Script" id=1]
+[ext_resource path="res://icons/id-card-glow.png" type="Texture" id=2]
+[ext_resource path="res://icons/thumbtack.png" type="Texture" id=3]
+
+[node name="WindowDialog" type="WindowDialog"]
+visible = true
+margin_left = -100.094
+margin_top = -151.072
+margin_right = 99.9058
+margin_bottom = -1.07162
+rect_min_size = Vector2( 200, 150 )
+rect_pivot_offset = Vector2( 1.3678, -15.4579 )
+resizable = true
+script = ExtResource( 1 )
+
+[node name="IconBar" type="HBoxContainer" parent="."]
+anchor_right = 1.0
+margin_top = -50.13
+margin_bottom = -18.13
+rect_min_size = Vector2( 0, 32 )
+
+[node name="MarginContainer" type="MarginContainer" parent="IconBar"]
+margin_right = 32.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
+
+[node name="TitleIcon" type="TextureRect" parent="IconBar/MarginContainer"]
+visible = false
+margin_right = 32.0
+margin_bottom = 32.0
+texture = ExtResource( 2 )
+expand = true
+
+[node name="MarginContainer2" type="MarginContainer" parent="IconBar"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -32.0
+margin_top = -32.0
+rect_min_size = Vector2( 32, 32 )
+
+[node name="PinIcon" type="TextureRect" parent="IconBar/MarginContainer2"]
+margin_right = 32.0
+margin_bottom = 32.0
+texture = ExtResource( 3 )
+expand = true
+
+[node name="NoteName" type="LineEdit" parent="."]
+visible = false
+anchor_right = 1.0
+margin_left = 16.0
+margin_top = -21.0
+focus_neighbour_left = NodePath("../NoteContents/NoteText")
+focus_neighbour_top = NodePath("../NoteContents/NoteText")
+focus_neighbour_right = NodePath("../NoteContents/NoteText")
+focus_neighbour_bottom = NodePath("../NoteContents/NoteText")
+focus_next = NodePath("../NoteContents/NoteText")
+focus_previous = NodePath("../NoteContents/NoteText")
+
+[node name="NoteContents" type="VSplitContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+split_offset = 50
+
+[node name="NoteText" type="TextEdit" parent="NoteContents"]
+margin_right = 200.0
+margin_bottom = 150.0
+
+[node name="TempPinTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
+[connection signal="gui_input" from="." to="." method="_on_WindowDialog_gui_input"]
+[connection signal="gui_input" from="IconBar/MarginContainer/TitleIcon" to="." method="_on_TitleIcon_gui_input"]
+[connection signal="gui_input" from="IconBar/MarginContainer2/PinIcon" to="." method="_on_PinIcon_gui_input"]
+[connection signal="focus_entered" from="NoteName" to="." method="_on_NoteName_focus_entered"]
+[connection signal="focus_exited" from="NoteName" to="." method="_on_NoteName_focus_exited"]
+[connection signal="text_changed" from="NoteName" to="." method="_on_NoteName_text_changed"]
+[connection signal="text_entered" from="NoteName" to="." method="_on_NoteName_text_entered"]
+[connection signal="focus_entered" from="NoteContents/NoteText" to="." method="_on_NoteText_focus_entered"]
+[connection signal="focus_exited" from="NoteContents/NoteText" to="." method="_on_NoteText_focus_exited"]
+[connection signal="timeout" from="TempPinTimer" to="." method="_on_TempPinTimer_timeout"]
