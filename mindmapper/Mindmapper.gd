@@ -62,7 +62,9 @@ func _on_BaseCactus_gui_input(event):
 	if Input.is_action_just_pressed("spawn_note"):
 		spawnNote(null, "", "", 1, null)
 
-
+func _on_New_Note_Requested(requestingNode):
+	spawnNote(null, "", "", 1, null)
+	
 
 
 func _on_FileDialog_popup_hide():
@@ -154,7 +156,7 @@ func _on_LoadDialog_file_selected(path):
 	
 	#print(nodeDict)
 	
-	
+
 	
 
 

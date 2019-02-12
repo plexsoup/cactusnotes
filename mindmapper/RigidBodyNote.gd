@@ -2,7 +2,10 @@ extends RigidBody2D
 
 # Declare member variables here. Examples:
 onready var NoteWindow = get_node("WindowDialog")
+onready var global = get_node("/root/global")
 var Time = 0
+
+signal new_note_requested(nodeRequesting)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -11,6 +14,7 @@ func _ready():
 func start(newPosition, pinStatus, title, text, id):
 	call_deferred("set_global_position", newPosition)
 	NoteWindow.start(self, pinStatus, title, text, id)
+	connect("new_note_requested", global.getRootSceneManager(), "_on_new_note_requested")
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -46,3 +50,8 @@ func _on_WindowDialog_pinned():
 func _on_WindowDialog_unpinned():
 	changeMode(MODE_RIGID)
 
+
+
+func _on_NewNodeBTN_pressed():
+	emit_signal("new_note_requested", self)
+	

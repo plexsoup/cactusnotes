@@ -75,10 +75,10 @@ margin_bottom = 595.59
 text = "Cactus Notes"
 
 [node name="LoadButton" type="TextureButton" parent="CanvasLayer"]
-margin_left = 186.056
-margin_top = 15.2056
-margin_right = 250.056
-margin_bottom = 79.2056
+margin_left = 105.025
+margin_top = 12.7501
+margin_right = 169.025
+margin_bottom = 76.7501
 texture_normal = ExtResource( 5 )
 expand = true
 
@@ -109,6 +109,7 @@ mode = 0
 [node name="ParallaxBackground" type="ParallaxBackground" parent="CanvasLayer"]
 
 [node name="Background" type="TextureRect" parent="CanvasLayer/ParallaxBackground"]
+visible = false
 self_modulate = Color( 1, 1, 1, 0.286275 )
 show_behind_parent = true
 anchor_right = 1.0

@@ -16,8 +16,16 @@ _global_script_class_icons={
 [application]
 
 config/name="Cactus Notes"
-run/main_scene="res://Mindmapper.tscn"
+run/main_scene="res://SceneManager.tscn"
 config/icon="res://icons/cactusicon.png"
+
+[autoload]
+
+global="*res://global.gd"
+
+[debug]
+
+gdscript/warnings/enable=false
 
 [display]
 
