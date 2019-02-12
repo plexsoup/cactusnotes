@@ -36,7 +36,6 @@ func _ready():
 	pass
 
 func start(textArray, parentScene):
-	print(self.name, " textArray == ", textArray)
 	#connect("initialized", global.getCurrentPlayer(), "_on_dialogBox_initialized")
 	connect("completed", parentScene, "_on_DialogBox_completed")
 
@@ -54,30 +53,34 @@ func start(textArray, parentScene):
 	#DialogBox.set_position(newPosition)
 
 	#emit_signal("initialized")
-
+	
 func end():
 	emit_signal("completed")
 
 	queue_free()
 
 func showNextLine():
-	print(self.name, " CurrentLine = ", CurrentLine)
 	CurrentLine += 1
 	NumLettersDisplayed = 0
 	if CurrentLine >= DialogText.size():
-		
 		end()
-		return
 	else:
 		CurrentLineText = DialogText[CurrentLine]
 		DialogBox.set_bbcode(CurrentLineText)
-		NumLettersDisplayed = 0
+		DialogBox.set_visible_characters(NumLettersDisplayed)
+		LetterTimer.start()
+		
 
 
 func showNextLetter():
 	if NumLettersDisplayed < CurrentLineText.length():
+		LetterTimer.start()
+
+
 		NumLettersDisplayed += 1
 		KeypressAudio.play()
+		
+		
 	DialogBox.set_visible_characters(NumLettersDisplayed)
 	#DialogBox.set_text(CurrentLineText.left(NumLettersDisplayed))
 
@@ -102,4 +105,5 @@ func _process(delta):
 
 func _on_LetterTimer_timeout():
 	showNextLetter()
+
 

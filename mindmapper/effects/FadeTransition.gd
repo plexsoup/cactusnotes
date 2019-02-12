@@ -12,7 +12,6 @@ func _ready():
 	$CanvasLayer/ColorRect.set_mouse_filter(2)
 
 func fadeIn():
-	print(self.name, " fading in")
 	$AnimationPlayer.play("fadeIn")
 	
 func fadeOut():

@@ -18,6 +18,10 @@ func _ready():
 #func _process(delta):
 #	pass
 
+func getCurrentScene():
+	return CurrentSceneNode
+
+
 func spawnTitleScene():
 	var titleScene = preload("res://TitleScene/TitleScene.tscn")
 	var newTitleScene = titleScene.instance()

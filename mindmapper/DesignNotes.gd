@@ -35,8 +35,9 @@ UI / UX:
 
 Bugs: 
 
-	- when you load a database, notes that should be pinned aren't set to STATIC_MODE
 	- when you create a note, it moves down right away. should move up?
+	- saving / loading is broken
+	
 	
 
 Features Required / User Stories:

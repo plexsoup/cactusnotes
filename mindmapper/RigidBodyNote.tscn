@@ -4,7 +4,7 @@
 [ext_resource path="res://scenery/flowerBud.png" type="Texture" id=2]
 [ext_resource path="res://scenery/flower.png" type="Texture" id=3]
 [ext_resource path="res://icons/cactusicon.png" type="Texture" id=4]
-[ext_resource path="res://WindowDialog.tscn" type="PackedScene" id=5]
+[ext_resource path="res://NoteGUI.tscn" type="PackedScene" id=5]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -32,7 +32,7 @@ position = Vector2( -3.66106, -16.5695 )
 scale = Vector2( 1.0047, 1.0047 )
 texture = ExtResource( 4 )
 
-[node name="WindowDialog" parent="." instance=ExtResource( 5 )]
+[node name="NoteGUI" parent="." instance=ExtResource( 5 )]
 margin_left = -98.2852
 margin_top = -81.41
 margin_right = 101.715

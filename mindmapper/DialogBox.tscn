@@ -59,7 +59,7 @@ script = ExtResource( 1 )
 
 [node name="KeypressNoise" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 2 )
-volume_db = -14.136
+volume_db = -24.233
 
 [node name="DialogTextLabel" type="Label" parent="."]
 margin_right = 40.0
@@ -67,6 +67,7 @@ margin_bottom = 14.0
 
 [node name="LetterTimer" type="Timer" parent="DialogTextLabel"]
 wait_time = 0.02
+one_shot = true
 
 [node name="ColorRect" type="ColorRect" parent="."]
 anchor_left = 0.5

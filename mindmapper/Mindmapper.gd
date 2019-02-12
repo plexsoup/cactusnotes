@@ -1,77 +1,118 @@
+"""
+
+This spawns new RigidBodyNotes and spawns DampedSpringJoints to connect them.
+
+Add GraphNodes (as RigidBodyNote) to $SpawnedNotes
+Add GraphEdges (as GraphEdge) to $SpawnedEdges
+
+Store no other information about the notes or springs.
+You can ask them for the information when you need it, eg: for saving/loading.
+	But, maybe another script should handle saving/loading
+
+
+---
+Refactor Notes:
+	If you find logic here, that isn't related to spawning, move it to another class
+
+"""
+
+
+
 extends Node2D
 
 # Declare member variables here. Examples:
 onready var RigidBodyNote = preload("res://RigidBodyNote.tscn")
-onready var BaseCactus = get_node("BaseCactusSB")
+onready var GraphEdge = preload("res://GraphEdge.tscn")
+
 onready var CurrentCamera = get_node("Camera2D")
 onready var SaveDialog = get_node("CanvasLayer/SaveDialog")
 onready var LoadDialog = get_node("CanvasLayer/LoadDialog")
 onready var NotesContainer = get_node("SpawnedNotes")
-onready var SpringsContainer = get_node("Springs")
+onready var SpringsContainer = get_node("SpawnedEdges")
+onready var FirstNoteSpawnPoint = get_node("FirstNoteSpawnPoint")
+
 
 var Time : float  = 0
 var tmp
 
 func _ready():
-	pass
+	spawnFirstNote()
 	
-#func getVelocityVector(delta):
-#	var springDistance = 200.0
-#	return Vector2(0.0, 0.0)
+func spawnFirstNote():
+	# First Note: to set the stage:
+	var noteTitle = "Cactus Notes"
+	var noteText = ""
+	var pinned = true
+	var AttachedTo = FirstNoteSpawnPoint # **** This might be a problem
+	var initialPos = FirstNoteSpawnPoint.get_global_position()
+	var noteID = 0
+	spawnNote(noteTitle, noteText, AttachedTo, pinned, initialPos, noteID )
+	
 	
 
-func _physics_process(delta):
-	update()
-	Time += delta
 	
-func _draw():
-	for spring in SpringsContainer.get_children():
-		var nodeA = spring.get_node(spring.get_node_a())
-		var nodeAPos = nodeA.get_position()
-		
-		var nodeB = spring.get_node(spring.get_node_b())
-		var nodeBPos = to_local(nodeB.get_global_position())
-		var lineColor = Color(0, 0.8, 0.2)
-		var lineWidth = 3.0
-		var antialias = true
-		draw_line(nodeAPos, nodeBPos, lineColor, lineWidth, antialias)
-		
-		draw_circle(nodeAPos, 20, Color(0, 1, 0))
-		
+func spawnNote(title, text, attachedTo, pinned: bool = false, newPosition : Vector2 = Vector2(0, 0), noteID : int = -1):
+	# newPosition seems unnecessary, but it's required for when we load notes from the save-file
 	
+	if noteID == null:
+		noteID = getNewNoteID()
 	
-func spawnNote(id, title, text, pinStatus, newPosition):
-	print("trying to spawn a note")
-	# spawn a new note, pinned to the cactus.
 	var newNote = RigidBodyNote.instance()
-	var randX = randf()*400 - 200
+
+	if newPosition == null:
+		newPosition = attachedTo.get_global_position() + Vector2(randf()*400-200, -200)
+
 	NotesContainer.add_child(newNote)
-	newNote.start(newPosition, pinStatus, title, text, id)
+
+	if attachedTo != FirstNoteSpawnPoint and attachedTo != null: # don't spawn an edge for the first node
+		spawnEdge(newNote, attachedTo)
+		
+
+	newNote.start(title, text, pinned, newPosition, noteID)
+
+func spawnEdge(nodeA, nodeB):
+	var newSpring = GraphEdge.instance()
 	
-	var newSpring = DampedSpringJoint2D.new()
 	SpringsContainer.add_child(newSpring)
-	newSpring.set_node_a(newSpring.get_path_to(BaseCactus))
-	newSpring.set_node_b(newSpring.get_path_to(newNote))
+	newSpring.set_node_a(newSpring.get_path_to(nodeA))
+	newSpring.set_node_b(newSpring.get_path_to(nodeB))
 	newSpring.set_length(750)
 	newSpring.set_rest_length(250)
 	
+func getNewNoteID():
+	return NotesContainer.get_child_count()
+
+func getNewEdgeID():
+	return SpringsContainer.get_child_count()
+
+#func _on_BaseCactus_gui_input(event):
+#	tmp = event
+#	if Input.is_action_just_pressed("spawn_note"):
+#		spawnNote("", "", 1, null, null, null )
+
 	
+func cleanup():
+	for note in NotesContainer.get_children():
+		note.queue_free()
+	for spring in SpringsContainer.get_children():
+		spring.queue_free()
+		
 
-func _on_BaseCactus_gui_input(event):
-	tmp = event
-	if Input.is_action_just_pressed("spawn_note"):
-		spawnNote(null, "", "", 1, null)
 
-func _on_New_Note_Requested(requestingNode):
-	spawnNote(null, "", "", 1, null)
+func _on_new_note_requested(requestingNode): # coming from the UI on one of the existing notes
 	
+	var noteTitle = "New Note"
+	var noteText = ""
+	var pinned = false
+	var attachedTo = requestingNode # **** This might be a problem
+	var initialPos = requestingNode.get_global_position() + Vector2(0, -200)
+	var noteID = 0
+	spawnNote(noteTitle, noteText, attachedTo, pinned, initialPos, noteID )
 
 
-func _on_FileDialog_popup_hide():
-	if CurrentCamera.has_method("enableZoom"):
-		CurrentCamera.enableZoom()
-	
-
+###################
+# Camera settings: disable it when dialogs are open.
+###################
 func _on_SaveButton_pressed():
 	SaveDialog.popup_centered()
 	# disable the camera so we can use the scroll wheel
@@ -85,81 +126,6 @@ func _on_LoadButton_pressed():
 	if CurrentCamera.has_method("disableZoom"):
 		CurrentCamera.disableZoom()
 
-
-func _on_SaveDialog_file_selected(path):
-	print(path)
-
-	var f = File.new()
-	
-	f.open(path, File.WRITE)
-	
-	var noteID = 0
-	var completeNotesDict : Dictionary = {}
-	
-	for note in $SpawnedNotes.get_children():
-		# read the title, the note, the pin status, and the coordinates
-		# then write to a file
-		var currentNoteDict : Dictionary = {}	
-
-		var noteContainer = note.get_node("WindowDialog")
-		var noteTitle = note.get_node("WindowDialog/NoteName").get_text()
-		var noteText = note.get_node("WindowDialog/NoteContents/NoteText").get_text()
-
-		currentNoteDict["ID"] = noteID
-		currentNoteDict["Title"] = noteTitle
-		currentNoteDict["Text"] = noteText
-		currentNoteDict["PinMode"] = noteContainer.CurrentPinState
-		currentNoteDict["Position"] = note.get_global_position()
-
-		#notesArr.push_back(currentNoteDict)
-
-		completeNotesDict[noteID] = currentNoteDict
-		
-		noteID += 1
-	
-	var jsonString = to_json(completeNotesDict)
-	f.store_string(jsonString)
-
-	print(jsonString)
-
-	
-	f.close()
-	
-		
-	
-func cleanup():
-	for note in NotesContainer.get_children():
-		note.queue_free()
-	for spring in SpringsContainer.get_children():
-		spring.queue_free()	
-
-func _on_LoadDialog_file_selected(path):
-	# open a JSON file. read each object and convert into a note.
-	cleanup()
-	
-	print(path)
-	var f = File.new()
-	f.open(path, File.READ)
-
-	# BUG: Fix loading json. 
-	# Seems like I'm only getting one record.
-	# Do i have to loop over every line?
-	print("File text: ", f.get_as_text())
-	var notesDict : Dictionary = parse_json(f.get_as_text())
-	print("notesDict: ", notesDict)
-
-	f.close()
-	
-	for row in notesDict:
-		var note = notesDict[row]
-		spawnNote(note["ID"], note["Title"], note["Text"], note["PinMode"], note["Position"])
-	
-	#print(nodeDict)
-	
-
-	
-
-
-
-
-
+func _on_FileDialog_popup_hide():
+	if CurrentCamera.has_method("enableZoom"):
+		CurrentCamera.enableZoom()

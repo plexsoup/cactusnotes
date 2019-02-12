@@ -5,13 +5,12 @@ onready var global = get_node("/root/global")
 signal start_button_pressed()
 
 export var IntroTextArr = [
-	"[b]This[/b] requires an explanation... [i]<press enter or space to continue, escape to cancel>[/i]",
-	"For creative professionals facing a new project, the mind can seem like a desert, bereft of ideas. Cactus Notes will help ideas flourish, like cacti born into a desert.",
+	"[b]This[/b] requires an explanation... \n\n[right][i]Press enter or space to continue, escape to skip.[/i][/right]",
+	"For creative professionals, when facing a new project, the mind can seem like a desert, bereft of ideas. Cactus Notes will help ideas flourish, like little cacti.",
 
-	"Once we get started, you'll see a cactus. Click on the flower to create a new note.",
-	"Click and drag a note to move it. Double click to edit a note's contents.",
+	"Once we get started, you'll see a cactus. Click on the flower to create a new note. Click and drag a note to move it. Double click to edit a note's contents.",
 	
-	"If you're still having trouble, you can select an additional challenge mode for inspiration. Consider a timed challenge or a reconstruction challenge."
+	"If you're looking for more inspiration, you can select an additional challenge mode. Consider a timed challenge or a reconstruction challenge."
 
 ]
 

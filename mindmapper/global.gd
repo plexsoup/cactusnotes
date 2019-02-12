@@ -14,5 +14,4 @@ func setRootSceneManager(node):
 	RootSceneManager = node
 	
 func getRootSceneManager():
-	print(self.name, " returning RootSceneManager == ", RootSceneManager )
 	return RootSceneManager
