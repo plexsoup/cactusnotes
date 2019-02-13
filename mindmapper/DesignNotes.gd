@@ -45,7 +45,7 @@ Features Required / User Stories:
 
 
 Game Feel / UX Improvements:
-
+	- when you spawn a new note, the camera should move to that note.
 
 
 """

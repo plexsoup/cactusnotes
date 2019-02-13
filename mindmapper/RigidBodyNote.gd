@@ -71,6 +71,7 @@ func getPinned():
 	print(self.name, " getPinned == ", get_mode())
 	print("MODE_STATIC == ", MODE_STATIC)
 	print("MODE_RIGID == ", MODE_RIGID)
+	print("MODE_CHARACTER == ", MODE_CHARACTER)
 	if get_mode() == MODE_STATIC:
 		return true
 	else:
@@ -101,7 +102,7 @@ func changeMode(newMode):
 	elif newMode == MODE_STATIC:
 		set_mode(MODE_STATIC)
 
-func _on_WindowDialog_window_dragged(mouseCoordinates):
+func _on_NoteGUI_window_dragged(mouseCoordinates):
 	#if get_mode() == MODE_STATIC:
 	call_deferred("set_global_position", mouseCoordinates)
 

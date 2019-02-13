@@ -33,9 +33,9 @@ scale = Vector2( 1.0047, 1.0047 )
 texture = ExtResource( 4 )
 
 [node name="NoteGUI" parent="." instance=ExtResource( 5 )]
-margin_left = -98.2852
-margin_top = -81.41
-margin_right = 101.715
-margin_bottom = 68.59
+margin_left = -99.1426
+margin_top = -65.1199
+margin_right = 100.858
+margin_bottom = 84.8801
 
 [connection signal="pressed" from="NewNodeBTN" to="." method="_on_NewNodeBTN_pressed"]

@@ -1,0 +1,47 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://icons/cactusicon.png" type="Texture" id=1]
+[ext_resource path="res://StickyNote.gd" type="Script" id=2]
+[ext_resource path="res://scenery/flowerBud.png" type="Texture" id=3]
+[ext_resource path="res://scenery/flower.png" type="Texture" id=4]
+
+[node name="StickyNote" type="Sprite"]
+texture = ExtResource( 1 )
+script = ExtResource( 2 )
+
+[node name="TextureButton" type="TextureButton" parent="."]
+margin_left = -28.3932
+margin_top = -171.616
+margin_right = 78.6068
+margin_bottom = -44.6156
+shortcut_in_tooltip = false
+texture_normal = ExtResource( 3 )
+texture_hover = ExtResource( 4 )
+expand = true
+
+[node name="TextEdit" type="TextEdit" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -190.5
+margin_top = -185.5
+margin_right = -65.5
+margin_bottom = -60.5
+wrap_enabled = true
+
+[node name="ColorRect" type="ColorRect" parent="TextEdit"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.505882, 0, 0, 1 )
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TextEdit/ColorRect"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+bbcode_enabled = true
+
+[connection signal="pressed" from="TextureButton" to="." method="_on_TextureButton_pressed"]
+[connection signal="gui_input" from="TextEdit" to="." method="_on_TextEdit_gui_input"]
+[connection signal="mouse_entered" from="TextEdit" to="." method="_on_TextEdit_mouse_entered"]
+[connection signal="mouse_exited" from="TextEdit" to="." method="_on_TextEdit_mouse_exited"]
+[connection signal="text_changed" from="TextEdit" to="." method="_on_TextEdit_text_changed"]
