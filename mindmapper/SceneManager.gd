@@ -13,6 +13,7 @@ var NextSceneNode
 func _ready():
 	global.setRootSceneManager(self)
 	spawnTitleScene()
+	randomize()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

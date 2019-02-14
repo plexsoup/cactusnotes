@@ -2,12 +2,12 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Various_Cactaceae.jpg-f75043694c2ade4a755013a5d0df1d82.stex"
+path="res://.import/info-sign.png-990fd270ab98f55c6da15213e21ad5fe.stex"
 
 [deps]
 
-source_file="res://reference/Various_Cactaceae.jpg"
-dest_files=[ "res://.import/Various_Cactaceae.jpg-f75043694c2ade4a755013a5d0df1d82.stex" ]
+source_file="res://icons/info-sign.png"
+dest_files=[ "res://.import/info-sign.png-990fd270ab98f55c6da15213e21ad5fe.stex" ]
 
 [params]
 

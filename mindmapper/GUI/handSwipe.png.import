@@ -2,12 +2,12 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/IMG_20170617_171323.jpg-c6ebe98d52ce710fab0bbc312ac24107.stex"
+path="res://.import/handSwipe.png-58059ba475a0fde366d2376a9a76e438.stex"
 
 [deps]
 
-source_file="res://reference/IMG_20170617_171323.jpg"
-dest_files=[ "res://.import/IMG_20170617_171323.jpg-c6ebe98d52ce710fab0bbc312ac24107.stex" ]
+source_file="res://GUI/handSwipe.png"
+dest_files=[ "res://.import/handSwipe.png-58059ba475a0fde366d2376a9a76e438.stex" ]
 
 [params]
 

@@ -2,12 +2,12 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/cactus.png-ae43b648a96d154a2ccf5d08ff051f10.stex"
+path="res://.import/rally-the-troops.png-68da4edb6d3155aade0bb933ac36cda6.stex"
 
 [deps]
 
-source_file="res://reference/cactus.png"
-dest_files=[ "res://.import/cactus.png-ae43b648a96d154a2ccf5d08ff051f10.stex" ]
+source_file="res://icons/rally-the-troops.png"
+dest_files=[ "res://.import/rally-the-troops.png-68da4edb6d3155aade0bb933ac36cda6.stex" ]
 
 [params]
 

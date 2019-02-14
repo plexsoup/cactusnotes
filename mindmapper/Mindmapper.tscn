@@ -1,12 +1,10 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Mindmapper.gd" type="Script" id=1]
 [ext_resource path="res://DesignNotes.gd" type="Script" id=2]
-[ext_resource path="res://FileIO.gd" type="Script" id=3]
-[ext_resource path="res://scenery/dunes.jpg" type="Texture" id=4]
-[ext_resource path="res://GUI/mainGUI.tscn" type="PackedScene" id=5]
-[ext_resource path="res://icon.png" type="Texture" id=6]
-[ext_resource path="res://GUI/Camera2D.tscn" type="PackedScene" id=7]
+[ext_resource path="res://scenery/dunes.jpg" type="Texture" id=3]
+[ext_resource path="res://GUI/mainGUI.tscn" type="PackedScene" id=4]
+[ext_resource path="res://GUI/CameraFocus.tscn" type="PackedScene" id=5]
 
 [node name="Mindmapper" type="Node2D"]
 position = Vector2( 512.329, 301.943 )
@@ -14,9 +12,6 @@ script = ExtResource( 1 )
 
 [node name="DesignNotes" type="Node" parent="."]
 script = ExtResource( 2 )
-
-[node name="FileIO" type="Node" parent="."]
-script = ExtResource( 3 )
 
 [node name="bgGUI" type="Node2D" parent="."]
 
@@ -26,32 +21,18 @@ layer = -1
 [node name="TextureRect" type="TextureRect" parent="bgGUI/CanvasLayer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-texture = ExtResource( 4 )
+texture = ExtResource( 3 )
 expand = true
-
-[node name="SpawnedEdges" type="Node" parent="."]
-
-[node name="SpawnedNotes" type="Node2D" parent="."]
-position = Vector2( -2.83289, 85.2663 )
 
 [node name="FirstNoteSpawnPoint" type="Position2D" parent="."]
 position = Vector2( -5.57306, 183.999 )
 
-[node name="mainGUI" parent="." instance=ExtResource( 5 )]
-position = Vector2( 0.441101, 116.875 )
-
 [node name="graphNodes" type="Node2D" parent="."]
 
-[node name="graphEdges" type="Node2D" parent="."]
+[node name="graphEdges" type="Node" parent="."]
 
-[node name="CameraFocus" type="Sprite" parent="."]
-texture = ExtResource( 6 )
+[node name="mainGUI" parent="." instance=ExtResource( 4 )]
 
-[node name="Camera2D" parent="CameraFocus" instance=ExtResource( 7 )]
-smoothing_enabled = true
-drag_margin_left = 0.4
-drag_margin_top = 0.4
-drag_margin_right = 0.4
-drag_margin_bottom = 0.4
+[node name="CameraFocus" parent="." instance=ExtResource( 5 )]
 
 [connection signal="gui_input" from="bgGUI/CanvasLayer/TextureRect" to="." method="_on_TextureRect_gui_input"]

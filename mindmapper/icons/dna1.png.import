@@ -2,12 +2,12 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/thumbtackPressed.png-83db144037d71e024573dbd661ff9691.stex"
+path="res://.import/dna1.png-df4b9fc48c7889cbaec326554f078359.stex"
 
 [deps]
 
-source_file="res://reference/thumbtackPressed.png"
-dest_files=[ "res://.import/thumbtackPressed.png-83db144037d71e024573dbd661ff9691.stex" ]
+source_file="res://icons/dna1.png"
+dest_files=[ "res://.import/dna1.png-df4b9fc48c7889cbaec326554f078359.stex" ]
 
 [params]
 

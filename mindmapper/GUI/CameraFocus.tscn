@@ -1,0 +1,40 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://GUI/handSwipe.png" type="Texture" id=1]
+[ext_resource path="res://GUI/hand.png" type="Texture" id=2]
+[ext_resource path="res://GUI/magnifyingGlass.png" type="Texture" id=3]
+[ext_resource path="res://CameraFocus.gd" type="Script" id=4]
+[ext_resource path="res://GUI/Camera2D.tscn" type="PackedScene" id=5]
+
+[sub_resource type="SpriteFrames" id=1]
+
+animations = [ {
+"frames": [ ExtResource( 1 ) ],
+"loop": true,
+"name": "swipe",
+"speed": 1.0
+}, {
+"frames": [ ExtResource( 2 ) ],
+"loop": true,
+"name": "hand",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 3 ) ],
+"loop": true,
+"name": "glass",
+"speed": 1.0
+} ]
+
+[node name="CameraFocus" type="AnimatedSprite"]
+position = Vector2( 0.826904, 0.0835876 )
+frames = SubResource( 1 )
+animation = "glass"
+offset = Vector2( -106.964, 3.41547 )
+script = ExtResource( 4 )
+
+[node name="Camera2D" parent="." instance=ExtResource( 5 )]
+smoothing_enabled = true
+
+[node name="FocalPoint" type="Position2D" parent="."]
+position = Vector2( -2.30383, 0.831726 )
+

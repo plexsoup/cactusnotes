@@ -2,12 +2,12 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/dunes.jpg-3932edcbf687b055906a27cfbd8b66c2.stex"
+path="res://.import/microscope.png-834987e1047d12271af6f9170064d970.stex"
 
 [deps]
 
-source_file="res://reference/dunes.jpg"
-dest_files=[ "res://.import/dunes.jpg-3932edcbf687b055906a27cfbd8b66c2.stex" ]
+source_file="res://icons/microscope.png"
+dest_files=[ "res://.import/microscope.png-834987e1047d12271af6f9170064d970.stex" ]
 
 [params]
 

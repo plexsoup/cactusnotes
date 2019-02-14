@@ -25,18 +25,21 @@ onready var RigidBodyNote = preload("res://RigidBodyNote.tscn")
 onready var GraphEdge = preload("res://GraphEdge.tscn")
 onready var NoteGUI = preload("res://NoteGUI.tscn")
 
-onready var NotesContainer = get_node("SpawnedNotes")
-onready var SpringsContainer = get_node("SpawnedEdges")
+#onready var NotesContainer = get_node("SpawnedNodes")
+#onready var SpringsContainer = get_node("SpawnedEdges")
 onready var FirstNoteSpawnPoint = get_node("FirstNoteSpawnPoint")
 
 onready var MainCamera = $CameraFocus/Camera2D
+onready var CameraFocus = $CameraFocus
 
 onready var GraphNodes = $graphNodes
 onready var GraphEdges = $graphEdges
 
+var AnchorNode
 
 var Time : float  = 0
 var tmp
+var Ticks : int = 0
 
 var BaseFont
 
@@ -70,12 +73,15 @@ func _ready():
 	print(self.name, " says there should be ", GraphNodes.get_child_count() , " thihngs in GraphNodes" )
 	
 	connect("camera_drag_requested", MainCamera, "_on_camera_drag_requested")
-	connect("node_spawned", MainCamera, "_on_node_spawned")
+	connect("camera_drag_requested", CameraFocus, "_on_camera_drag_requested")
+	
+	connect("node_spawned", CameraFocus, "_on_node_spawned")
 	
 func establishBaseFont():
 	var label = Label.new()
 	BaseFont = label.get_font("")
 	label.queue_free()
+	global.BaseFont = BaseFont
 
 func spawnAnchor():
 	# Temporary while we work out the kinks	
@@ -86,8 +92,9 @@ func spawnAnchor():
 	var circleShape = CircleShape2D.new()
 	circleShape.set_radius(20)
 	collisionShape.set_shape(circleShape)
-	GraphNodes.add_child(anchorNode)
-	anchorNode.set_global_position(Vector2(200, 200))
+	add_child(anchorNode)
+	anchorNode.set_position(Vector2(0, 0))
+	AnchorNode = anchorNode
 	return anchorNode
 
 
@@ -102,21 +109,26 @@ func spawnFirstNote():
 	var noteID = 0
 	spawnNote(noteTitle, noteText, AttachedTo, pinned, initialPos, noteID )
 	
-	
+func getGraphNodeID(node):
+	if node.has_child("StickyNote"):
+		return node.get_node("StickyNote").getID()
+	else:
+		print(self.name, ": error calling getGraphNodeID. ", node, " doesn't have a StickyNote" )
 
 func spawnGraphSpring(node_a, node_b):
 	# Create the Spring
-	var newSpring = DampedSpringJoint2D.new()
+	var newSpring = GraphEdge.instance()
+	
 	GraphEdges.add_child(newSpring)
+	newSpring.start(node_a, node_b)
 
-	newSpring.set_node_a(newSpring.get_path_to(node_a))
-	newSpring.set_node_b(newSpring.get_path_to(node_b))
 	
-	newSpring.set_length(250)
-	newSpring.set_rest_length(150)
-	newSpring.set_stiffness(200)
-	newSpring.set_damping(1)
-	
+func getGraphNodeByID(id):
+	if id != null:
+		return GraphNodes.get_child(id)
+	else:
+		return AnchorNode
+	# For saving and loading games, this assumes that you've reinstated them in the same order as before.
 
 func spawnGraphNode(attachedTo):
 	var newGraphNode = RigidBody2D.new()
@@ -125,67 +137,45 @@ func spawnGraphNode(attachedTo):
 	newCircleShape.set_radius(75)
 	var newCollisionShape = CollisionShape2D.new()
 	newCollisionShape.set_shape(newCircleShape)
-	newGraphNode.set_global_position(attachedTo.get_global_position() - Vector2(0, 200))
+	var randOffset = Vector2(randf()*300 - 150, randf()*100-300)
+	
+	if attachedTo != null:
+		newGraphNode.set_position(attachedTo.get_position() + randOffset)
+	
 	GraphNodes.add_child(newGraphNode)
 	newGraphNode.add_child(newCollisionShape)
-
-#	var spriteTexture = preload("res://icon.png")
-#	var newSprite = Sprite.new()
-
-	#var newNoteGUI = NoteGUI.instance()
 	
 	var stickyNote = preload("res://StickyNote.tscn")
 	var newStickyNote = stickyNote.instance()
 	
 	newGraphNode.add_child(newStickyNote)
 
+	newStickyNote.setID(newGraphNode.get_position_in_parent())
+	print("New Graph Node: ID == ", newStickyNote.getID())
+
 
 	newGraphNode.set_sleeping(false)
-	spawnGraphSpring(newGraphNode, attachedTo)
+
+	if attachedTo != null:
+		spawnGraphSpring(newGraphNode, attachedTo)
 	
 	emit_signal("node_spawned", newGraphNode)
 	return newGraphNode
 
+func initializeGraphNode(node, text : String, pos : Vector2 , pinned : bool):
+	node.start(text, pos, pinned)
+
 
 func spawnNote(title, text, attachedTo, pinned: bool = false, newPosition : Vector2 = Vector2(0, 0), noteID : int = -1):
+	print(self.name, " spawnNote Called" )
 	var newNode = spawnGraphNode(attachedTo)
 	return newNode
 	
-func OLDspawnNote(title, text, attachedTo, pinned: bool = false, newPosition : Vector2 = Vector2(0, 0), noteID : int = -1):
-	# newPosition seems unnecessary, but it's required for when we load notes from the save-file
-	
-	if noteID == null:
-		noteID = getNewNoteID()
-	
-	var newNote = RigidBodyNote.instance()
-
-	if newPosition == null:
-		newPosition = attachedTo.get_global_position() + Vector2(randf()*400-200, -200)
-
-	NotesContainer.add_child(newNote)
-
-	if attachedTo != FirstNoteSpawnPoint and attachedTo != null: # don't spawn an edge for the first node
-		spawnEdge(newNote, attachedTo)
-		
-
-	newNote.start(title, text, pinned, newPosition, noteID)
-
-func spawnEdge(nodeA, nodeB):
-	var newSpring = GraphEdge.instance()
-	
-	SpringsContainer.add_child(newSpring)
-	#nodeA.add_child(newSpring)
-	newSpring.set_global_position(nodeA.get_global_position())
-	newSpring.set_node_a(newSpring.get_path_to(nodeA))
-	newSpring.set_node_b(newSpring.get_path_to(nodeB))
-	newSpring.set_length(750)
-	newSpring.set_rest_length(350)
-	
 func getNewNoteID():
-	return NotesContainer.get_child_count()
+	return GraphNodes.get_child_count()
 
 func getNewEdgeID():
-	return SpringsContainer.get_child_count()
+	return GraphEdges.get_child_count()
 
 #func _on_BaseCactus_gui_input(event):
 #	tmp = event
@@ -194,29 +184,54 @@ func getNewEdgeID():
 
 	
 func cleanup():
-	for note in NotesContainer.get_children():
-		note.queue_free()
-	for spring in SpringsContainer.get_children():
+	# It's important that you remove the edges before you remove the nodes.
+	for spring in GraphEdges.get_children():
 		spring.queue_free()
-		
+	for note in GraphNodes.get_children():
+		note.queue_free()
 
 func _physics_process(delta):
 	update()
 
 func _draw():
-	for graphEdge in GraphEdges.get_children():
-		var node_a_pos = graphEdge.get_node(graphEdge.get_node_a()).get_position()
-		var node_b_pos = graphEdge.get_node(graphEdge.get_node_b()).get_position()
-		draw_line(node_a_pos, node_b_pos, Color(0.2, 0.2, 0.2), 3.0, true)
-	for graphNode in GraphNodes.get_children():
-		
-		if graphNode is RigidBody2D:
-			graphNode.set_sleeping(false)
-		draw_circle(graphNode.get_position(), 20, Color(0, 1, 1))
-		
-		var nodePos = Vector2( int(graphNode.get_position().x), int(graphNode.get_position().y))
-		var nodeName = graphNode.name
-		draw_string(BaseFont, graphNode.get_position(), str(nodePos) + " " + nodeName, Color(1, 0, 1) )
+	Ticks += 1
+	if Ticks % 200 == 0:
+		print(GraphNodes.get_children())
+		print(GraphEdges.get_children())
+	
+#	draw_circle(Vector2(0,0), 50, Color.darkgreen )
+##	draw_string(BaseFont, Vector2(0,10), "Vector2(0,0)", Color.blue)
+#
+#	for graphEdge in GraphEdges.get_children():
+#		print("graphEdge == ", graphEdge)
+#
+#		var node_a_path = graphEdge.get_node_a()
+#		var node_b_path = graphEdge.get_node_b()
+#		if node_a_path != null and node_b_path != null:
+#
+#			var node_a_pos : Vector2 = Vector2(0,0)
+#			var node_a = graphEdge.get_node(node_a_path)
+#			if node_a != null and is_instance_valid(node_a):
+#				node_a_pos = node_a.get_position()
+#
+#			var node_b_pos : Vector2 = Vector2(0,0)
+#			var node_b = graphEdge.get_node(node_b_path)
+#			if node_b != null and is_instance_valid(node_b):
+#				node_b_pos = node_b.get_position()
+#
+#			draw_line(node_a_pos, node_b_pos, Color.forestgreen, 3.0, true)
+#	for graphNode in GraphNodes.get_children():
+#
+#		if graphNode is RigidBody2D:
+#			graphNode.set_sleeping(false)
+#
+#		var nodePos = Vector2( int(graphNode.get_position().x), int(graphNode.get_position().y))
+#		var offset = Vector2(-50, 150)
+#
+#		#draw_circle(nodePos, 20, Color.whitesmoke)
+#
+#		var nodeName = graphNode.name
+#		draw_string(BaseFont, nodePos + offset, str(nodePos) + " " + nodeName, Color.blueviolet )
 
 
 func _on_new_note_requested(requestingNode): # coming from the UI on one of the existing notes
@@ -237,6 +252,6 @@ func _on_new_note_requested(requestingNode): # coming from the UI on one of the 
 func _on_TextureRect_gui_input(event):
 	#print("textureRect received event: ", event)
 	if event is InputEventMouseButton and Input.is_action_just_pressed("drag_camera"):
-		print("user would like to drag the camera view")
+		#print("user would like to drag the camera view")
 		emit_signal("camera_drag_requested")
 		

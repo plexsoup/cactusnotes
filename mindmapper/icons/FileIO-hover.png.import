@@ -2,12 +2,12 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/nasa-space-pictures-hd-hd-widescreen-11.jpg-9a7d8e3e9312bda734c6eca82a15563b.stex"
+path="res://.import/FileIO-hover.png-5c3c2ec0f3d9d861a777f46da73b8f77.stex"
 
 [deps]
 
-source_file="res://reference/nasa-space-pictures-hd-hd-widescreen-11.jpg"
-dest_files=[ "res://.import/nasa-space-pictures-hd-hd-widescreen-11.jpg-9a7d8e3e9312bda734c6eca82a15563b.stex" ]
+source_file="res://icons/FileIO-hover.png"
+dest_files=[ "res://.import/FileIO-hover.png-5c3c2ec0f3d9d861a777f46da73b8f77.stex" ]
 
 [params]
 

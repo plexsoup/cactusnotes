@@ -2,12 +2,12 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/flowerbud.jpg-37e3778573ff4e53c8ddf2021cee02c9.stex"
+path="res://.import/ninja-velociraptor-hover.png-3aad25e45029bab078c80c64aab6590b.stex"
 
 [deps]
 
-source_file="res://reference/flowerbud.jpg"
-dest_files=[ "res://.import/flowerbud.jpg-37e3778573ff4e53c8ddf2021cee02c9.stex" ]
+source_file="res://icons/ninja-velociraptor-hover.png"
+dest_files=[ "res://.import/ninja-velociraptor-hover.png-3aad25e45029bab078c80c64aab6590b.stex" ]
 
 [params]
 

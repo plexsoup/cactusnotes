@@ -55,6 +55,12 @@ func start(noteTitle: String, noteText: String, pinned : bool, newPosition: Vect
 	NoteID = noteID
 
 
+func setID(id):
+	NoteID = id
+	
+func getID():
+	return NoteID
+
 func setText(noteText):
 	NoteText = noteText
 

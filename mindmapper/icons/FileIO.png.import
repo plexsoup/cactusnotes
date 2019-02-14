@@ -2,12 +2,12 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/usbStick.jpg-a70deda64c2559adb052d47cf06dff53.stex"
+path="res://.import/FileIO.png-3c0a99efc1d9650b93b9481c9736895b.stex"
 
 [deps]
 
-source_file="res://reference/usbStick.jpg"
-dest_files=[ "res://.import/usbStick.jpg-a70deda64c2559adb052d47cf06dff53.stex" ]
+source_file="res://icons/FileIO.png"
+dest_files=[ "res://.import/FileIO.png-3c0a99efc1d9650b93b9481c9736895b.stex" ]
 
 [params]
 

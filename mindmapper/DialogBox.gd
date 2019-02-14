@@ -107,3 +107,13 @@ func _on_LetterTimer_timeout():
 	showNextLetter()
 
 
+
+
+func _on_ColorRect_gui_input(event):
+	if event is InputEventMouseButton and event.is_pressed():
+		revealAllLettersOrShowNextLine()
+
+
+func _on_DialogTextBox_gui_input(event):
+	if event is InputEventMouseButton and event.is_pressed():
+		revealAllLettersOrShowNextLine()

@@ -2,12 +2,12 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/flower.jpg-a2a8a4dc43feee9d1cb1160482fd5f63.stex"
+path="res://.import/magnifyingGlass.png-11cee8e71399db97dcc55c4d1524e56e.stex"
 
 [deps]
 
-source_file="res://reference/flower.jpg"
-dest_files=[ "res://.import/flower.jpg-a2a8a4dc43feee9d1cb1160482fd5f63.stex" ]
+source_file="res://GUI/magnifyingGlass.png"
+dest_files=[ "res://.import/magnifyingGlass.png-11cee8e71399db97dcc55c4d1524e56e.stex" ]
 
 [params]
 

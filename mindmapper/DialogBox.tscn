@@ -98,3 +98,5 @@ custom_fonts/normal_font = SubResource( 7 )
 bbcode_enabled = true
 
 [connection signal="timeout" from="DialogTextLabel/LetterTimer" to="." method="_on_LetterTimer_timeout"]
+[connection signal="gui_input" from="ColorRect" to="." method="_on_ColorRect_gui_input"]
+[connection signal="gui_input" from="DialogTextBox" to="." method="_on_DialogTextBox_gui_input"]

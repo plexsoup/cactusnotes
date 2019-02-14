@@ -10,6 +10,7 @@ export var RepositionSpeed : float = 0.25
 var InitialZoom = Vector2(1.0, 1.0)
 var DesiredZoom = InitialZoom
 onready var CameraFocus = $".."
+onready var FocalPoint = $"../FocalPoint"
 var CurrentMouseOffset : Vector2
 
 
@@ -36,6 +37,10 @@ func zoomToCursor():
 		DesiredZoom = Vector2(0.1, 0.1)
 		
 	self.zoom = DesiredZoom
+	
+	var vectorToCursor = FocalPoint.get_global_position() - get_global_position()
+	set_global_position(get_global_position() + vectorToCursor/3 )
+	# Can I just increase the drag margins as zoom increases?
 	
 
 
@@ -76,13 +81,16 @@ func enableZoom():
 	self.zoom = DesiredZoom
 
 func _on_camera_drag_requested():
-	LastMousePosition = get_global_mouse_position()
-	setState(STATES.dragging)
+#	LastMousePosition = get_global_mouse_position()
+#	setState(STATES.dragging)
+	pass
+
+func zoomToFocus():
+	set_global_position(CameraFocus.get_global_position())
 	
-	
-func _on_node_spawned(node):
-	CameraFocus.set_global_position(node.get_global_position())
-	
+#func _on_node_spawned(node): # from Mindmapper.gd
+#	CameraFocus.set_global_position(node.get_global_position())
+#	zoomToFocus()
 	
 	
 	

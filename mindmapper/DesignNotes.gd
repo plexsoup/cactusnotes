@@ -35,7 +35,7 @@ UI / UX:
 
 Bugs: 
 
-	- when you create a note, it moves down right away. should move up?
+	- after dragging canvas, the camera gets really speedy
 	- saving / loading is broken
 	
 	
@@ -45,8 +45,8 @@ Features Required / User Stories:
 
 
 Game Feel / UX Improvements:
-	- when you spawn a new note, the camera should move to that note.
-
+	- should be able to navigate the node-web by keyboard.
+	- zoom out should zoom towards mouse cursor. 
 
 """
 

@@ -2,12 +2,12 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/thumbtack.jpg-24b73c73b1707b27f7b0c8f5ac261d19.stex"
+path="res://.import/info-sign-hover.png-fd80dd460d7b8036f67ff9dcf12b7065.stex"
 
 [deps]
 
-source_file="res://reference/thumbtack.jpg"
-dest_files=[ "res://.import/thumbtack.jpg-24b73c73b1707b27f7b0c8f5ac261d19.stex" ]
+source_file="res://icons/info-sign-hover.png"
+dest_files=[ "res://.import/info-sign-hover.png-fd80dd460d7b8036f67ff9dcf12b7065.stex" ]
 
 [params]
 
