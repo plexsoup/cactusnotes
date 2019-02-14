@@ -41,12 +41,13 @@ func start(nodeA, nodeB):
 
 	
 func getSaveData():
-	return { "nodeA": Node_A_ID, "nodeB": Node_B_ID }
+	return { "node_a_id": Node_A_ID, "node_b_id": Node_B_ID }
 
 func loadSaveData(data):
 	
-	start(MindMapper.getGraphNodeByID(data["nodeA"]), MindMapper.getGraphNodeByID(data["nodeB"]))
-
+	#start(MindMapper.getGraphNodeByID(data["nodeA"]), MindMapper.getGraphNodeByID(data["nodeB"]))
+	pass
+	# shouldn't be necessary if the node_id's are provided when the springs are spawned
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -58,18 +59,16 @@ func _process(delta):
 
 		
 #	if is_instance_valid(get_node(get_node_a())):
-	if Ticks % 5 == 0:
-		update()
+	#update()
 
-func _draw():
-	var nodeAPos = Vector2(0,0)
-	var nodeBPos = Vector2(0,0)
-	var nodeA = get_node(get_node_a())
-	if is_instance_valid(nodeA):
-		nodeAPos = to_local(nodeA.get_global_position())
-	var nodeB = get_node(get_node_b())
-	if is_instance_valid(nodeB):
-		nodeBPos = to_local(get_node(get_node_b()).get_global_position())
-	var lineWidth = 3.0
-	draw_line(nodeAPos, nodeBPos, Color(0, 0.8, 0), lineWidth)
+#func _draw():
+#
+#	var nodeA = get_node(get_node_a())
+#	var nodeAPos = to_local(nodeA.get_position())
+#
+#	var nodeB = get_node(get_node_b())
+#	var nodeBPos = to_local(get_node(get_node_b()).get_position())
+#
+#	var lineWidth = 3.0
+#	draw_line(nodeAPos, nodeBPos, Color(0, 0.8, 0), lineWidth)
 	

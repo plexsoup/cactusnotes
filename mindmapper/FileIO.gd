@@ -21,11 +21,18 @@ var SpringsDict : Dictionary
 
 var MindMapper
 
+signal new_note_requested()
+signal new_spring_requested(node_a_id, node_b_id)
+signal cleanup_requested()
+
 func _ready():
 	MindMapper = global.getRootSceneManager().getCurrentScene()
 	GraphNodeContainer = MindMapper.get_node("graphNodes")
 	GraphEdgeContainer = MindMapper.get_node("graphEdges")
-	
+
+	connect("new_note_requested", MindMapper, "_on_FileIO_new_note_requested")
+	connect("new_spring_requested", MindMapper, "_on_FileIO_new_spring_requested")
+	connect("cleanup_requested", MindMapper, "_on_cleanup_requested")
 
 func saveFile(path):
 	var f = File.new()
@@ -52,9 +59,7 @@ func buildDictionariesFromJSON(jsonText):
 func loadFile(path):
 	# open a JSON file. read each object and convert into a note.
 	
-	if MindMapper.has_method("cleanup"):
-		print("cleaning up old canvas")
-		MindMapper.cleanup()
+	emit_signal("cleanup_requested") # for MindMapper.gd to reset the canvas
 	var f = File.new()
 	f.open(path, File.READ)
 	buildDictionariesFromJSON(f.get_as_text())
@@ -66,7 +71,7 @@ func loadFile(path):
 	#var graphNotesArr = convertNotesDictToArray(NotesDict) # because JSON doesn't preserve order
 	
 	var graphNotesArr = Array(NotesDict.values())
-	
+	# ^^^^ This could be a problem if the JSON order isn't preserved.
 
 	# spawn the graph
 	spawnNotesFromArray(graphNotesArr)
@@ -82,6 +87,7 @@ func spawnNotesFromArray(graphNotesArr : Array):
 		if note == null:
 			breakpoint
 			
+		# VVVVV Can I move this to a signal instead of a method call?
 		if MindMapper.has_method("spawnGraphNode"):
 			var newNode = MindMapper.spawnGraphNode(null)
 			if newNode.has_node("StickyNote"):
@@ -95,13 +101,9 @@ func spawnSpringsFromDict(springsDict : Dictionary):
 	# Get the graphSprings
 	for row in springsDict:
 		var spring = springsDict[row]
-		print(self.name, " in loadFile: spring == ", spring )
 		
-		if MindMapper.has_method("spawnGraphSpring"):
-			var node_a = MindMapper.getGraphNodeByID(spring["nodeA"])
-			var node_b = MindMapper.getGraphNodeByID(spring["nodeB"])
+		emit_signal("new_spring_requested", spring["node_a_id"], spring["node_b_id"])
 			
-			MindMapper.spawnGraphSpring(node_a, node_b)
 			
 	
 func getNotesAsDict():

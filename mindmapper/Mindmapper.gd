@@ -122,8 +122,12 @@ func spawnGraphNode(attachedTo):
 	newCollisionShape.set_shape(newCircleShape)
 	var randOffset = Vector2(randf()*300 - 150, randf()*100-300)
 	
+	var newPos = Vector2(0,0)
 	if attachedTo != null:
-		newGraphNode.set_position(attachedTo.get_position() + randOffset)
+		newPos = attachedTo.get_global_position() + randOffset
+	
+	newGraphNode.set_global_position(newPos)
+	
 	
 	GraphNodes.add_child(newGraphNode)
 	newGraphNode.add_child(newCollisionShape)
@@ -178,27 +182,48 @@ func cleanup():
 
 
 
-#func _physics_process(delta):
-#	update()
+func _physics_process(delta):
+	update()
 
 
 
-#func _draw():
-#	Ticks += 1
-#	if Ticks % 200 == 0:
-#		print(self.name, " GraphNodes.children: ", GraphNodes.get_children())
-#		print(self.name, " GraphEdges.children: ", GraphEdges.get_children())
+func _draw():
+	for spring in GraphEdges.get_children():
+		var nodeA = spring.get_node(spring.get_node_a())
+		var nodeB = spring.get_node(spring.get_node_b())
+		
+		var nodeAPos = to_local(nodeA.get_global_position())
+		var nodeBPos = to_local(nodeB.get_global_position())
+		
+		draw_line(nodeAPos, nodeBPos, Color.burlywood, 3.0, true)
 
 
-
-func _on_new_note_requested(requestingNode): # coming from the UI on one of the existing notes
+func _on_flower_new_note_requested(requestingNode): # coming from the UI on one of the existing notes
 	spawnGraphNode(requestingNode)
 
-
+func _on_FileIO_new_note_requested(): # When loading notes from file, we don't know the edges yet.
+	spawnGraphNode(null)
+	
+func _on_FileIO_new_spring_requested(node_a_id, node_b_id):
+	var node_a
+	var node_b
+	
+	if node_a_id == null:
+		node_a = AnchorNode
+	else:
+		node_a = GraphNodes.get_child(node_a_id)
+	if node_b_id == null:
+		node_b = AnchorNode
+	else:
+		node_b = GraphNodes.get_child(node_b_id)
+	
+	spawnGraphSpring(node_a, node_b)
 
 func _on_TextureRect_gui_input(event):
 	#print("textureRect received event: ", event)
 	if event is InputEventMouseButton and Input.is_action_just_pressed("drag_camera"):
 		#print("user would like to drag the camera view")
 		emit_signal("camera_drag_requested")
-		
+
+func _on_cleanup_requested():
+	cleanup()

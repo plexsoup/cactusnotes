@@ -9,7 +9,7 @@
 texture = ExtResource( 1 )
 script = ExtResource( 2 )
 
-[node name="TextureButton" type="TextureButton" parent="."]
+[node name="NewNoteButton" type="TextureButton" parent="."]
 margin_left = -28.3932
 margin_top = -171.616
 margin_right = 78.6068
@@ -40,7 +40,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 bbcode_enabled = true
 
-[connection signal="pressed" from="TextureButton" to="." method="_on_TextureButton_pressed"]
+[connection signal="pressed" from="NewNoteButton" to="." method="_on_NewNoteButton_pressed"]
 [connection signal="gui_input" from="TextEdit" to="." method="_on_TextEdit_gui_input"]
 [connection signal="mouse_entered" from="TextEdit" to="." method="_on_TextEdit_mouse_entered"]
 [connection signal="mouse_exited" from="TextEdit" to="." method="_on_TextEdit_mouse_exited"]

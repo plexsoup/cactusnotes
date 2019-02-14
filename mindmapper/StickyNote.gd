@@ -1,3 +1,11 @@
+"""
+
+StickyNote handles user interaction with a datastore and an underlying physics object (PhysicsParent).
+
+Note: to move graphNodes around, move the PhysicsParent, not the StickyNote!
+
+"""
+
 extends Node2D
 
 class_name StickyNote
@@ -33,7 +41,7 @@ func _ready():
 	ColorBG.set_mouse_filter(Control.MOUSE_FILTER_IGNORE)
 	RichTextDisplay.set_mouse_filter(Control.MOUSE_FILTER_IGNORE)
 
-	connect("new_note_requested", global.getRootSceneManager().getCurrentScene(), "_on_new_note_requested")
+	connect("new_note_requested", global.getRootSceneManager().getCurrentScene(), "_on_flower_new_note_requested")
 	connect("picked_up_cactus", global.getCameraFocus(), "_on_picked_up_cactus")
 	connect("released_cactus", global.getCameraFocus(), "_on_released_cactus")
 
@@ -88,7 +96,7 @@ func getSaveData():
 
 func loadSavedData(data : Dictionary):
 	var newPos : Vector2 = str2var(data["pos"])
-	set_global_position(newPos)
+	PhysicsParent.set_global_position(newPos)
 	if bool(data["pinned"]) == true:
 		print("loading pin data: ", data["pinned"])
 		PhysicsParent.set_mode(RigidBody2D.MODE_STATIC)
@@ -98,15 +106,13 @@ func loadSavedData(data : Dictionary):
 		setState(STATES.idle)
 	SaveLoadID = data["ID"]
 	TextEditBox.set_text(data["Text"])
+	RichTextDisplay.set_bbcode(data["Text"])
 	
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
 	
-	
-
-		
 
 
 func _on_TextEdit_mouse_entered():
@@ -134,8 +140,7 @@ func _on_TextEdit_text_changed():
 	RichTextDisplay.set_bbcode(TextEditBox.get_text())
 
 
-func _on_TextureButton_pressed():
-	emit_signal("new_note_requested", PhysicsParent)
+
 
 
 func _on_TextEdit_gui_input(event):
@@ -156,3 +161,6 @@ func _on_TextEdit_gui_input(event):
 	if TextEditBox.has_focus() and Input.is_action_just_pressed("spawn_note"):
 		emit_signal("new_note_requested", PhysicsParent)
 		
+
+func _on_NewNoteButton_pressed():
+	emit_signal("new_note_requested", PhysicsParent)

@@ -27,9 +27,9 @@ expand = true
 [node name="FirstNoteSpawnPoint" type="Position2D" parent="."]
 position = Vector2( -5.57306, 183.999 )
 
-[node name="graphEdges" type="Node2D" parent="."]
+[node name="graphEdges" type="Node" parent="."]
 
-[node name="graphNodes" type="Node2D" parent="."]
+[node name="graphNodes" type="Node" parent="."]
 
 [node name="mainGUI" parent="." instance=ExtResource( 4 )]
 
