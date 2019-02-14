@@ -15,9 +15,17 @@ onready var global = get_node("/root/global")
 var GraphNodeContainer
 var GraphEdgeContainer
 
+var ComprehensiveDict : Dictionary
+var NotesDict : Dictionary
+var SpringsDict : Dictionary
+
+var MindMapper
+
 func _ready():
-	GraphNodeContainer = global.getRootSceneManager().getCurrentScene().get_node("graphNodes")
-	GraphEdgeContainer = global.getRootSceneManager().getCurrentScene().get_node("graphEdges")
+	MindMapper = global.getRootSceneManager().getCurrentScene()
+	GraphNodeContainer = MindMapper.get_node("graphNodes")
+	GraphEdgeContainer = MindMapper.get_node("graphEdges")
+	
 
 func saveFile(path):
 	var f = File.new()
@@ -35,53 +43,70 @@ func saveFile(path):
 	f.close()
 	
 
+func buildDictionariesFromJSON(jsonText):
+	ComprehensiveDict = parse_json(jsonText)
+	NotesDict = ComprehensiveDict["Notes"]
+	SpringsDict = ComprehensiveDict["Springs"]
+	
 
 func loadFile(path):
-	var mindMapper = global.getRootSceneManager().getCurrentScene()
 	# open a JSON file. read each object and convert into a note.
 	
-	if mindMapper.has_method("cleanup"):
-		mindMapper.cleanup()
-	
-	mindMapper.spawnAnchor()
-	
-	#print(path)
+	if MindMapper.has_method("cleanup"):
+		print("cleaning up old canvas")
+		MindMapper.cleanup()
 	var f = File.new()
 	f.open(path, File.READ)
-
-
-	#print("File text: ", f.get_as_text())
-	
-	var notesDict
-	var springsDict
-	
-	var comprehensiveDict = parse_json(f.get_as_text())
-	if typeof(comprehensiveDict) == TYPE_DICTIONARY:
-		notesDict = comprehensiveDict["Notes"]
-		springsDict = comprehensiveDict["Springs"]
-	
-		#print("WOO: notesDict: ", notesDict)
+	buildDictionariesFromJSON(f.get_as_text())
 
 	f.close()
 
-	var graphNotesArr = convertNotesDictToArray(notesDict) # because JSON doesn't preserve order
+	# resequence the loaded JSON file
 	
-	print("graphNotesArr == ", graphNotesArr)
-	for note in graphNotesArr:
-		if mindMapper.has_method("spawnGraphNode"):
-			var newNode = mindMapper.spawnGraphNode(null)
-			print(note["pos"])
-			newNode.get_node("StickyNote").loadSavedData(note)
+	#var graphNotesArr = convertNotesDictToArray(NotesDict) # because JSON doesn't preserve order
+	
+	var graphNotesArr = Array(NotesDict.values())
+	
 
+	# spawn the graph
+	spawnNotesFromArray(graphNotesArr)
+	spawnSpringsFromDict(SpringsDict)
+
+func spawnNotesFromArray(graphNotesArr : Array):
+	print("graphNotesArr == ", graphNotesArr)
+
+
+		
+	#spawn all the StickyNotes
+	for note in graphNotesArr:
+		if note == null:
+			breakpoint
+			
+		if MindMapper.has_method("spawnGraphNode"):
+			var newNode = MindMapper.spawnGraphNode(null)
+			if newNode.has_node("StickyNote"):
+				#breakpoint
+				newNode.get_node("StickyNote").loadSavedData(note)
+			else:
+				print(self.name, " in spawnNotesFromArray: ", newNode , " doesn't have a StickyNote" )
+
+
+func spawnSpringsFromDict(springsDict : Dictionary):
 	# Get the graphSprings
 	for row in springsDict:
 		var spring = springsDict[row]
+		print(self.name, " in loadFile: spring == ", spring )
 		
-		if mindMapper.has_method("spawnGraphSpring"):
-			var node_a = mindMapper.getGraphNodeByID(spring["nodeA"])
-			var node_b = mindMapper.getGraphNodeByID(spring["nodeB"])
-			mindMapper.spawnGraphSpring(node_a, node_b)	
-
+		if MindMapper.has_method("spawnGraphSpring"):
+			print("--== look here ==--")
+			var node_a = MindMapper.getGraphNodeByID(spring["nodeA"])
+			print("== spring[nodeA] == ", spring["nodeA"] )
+			print("== node_a == ", node_a) 
+			var node_b = MindMapper.getGraphNodeByID(spring["nodeB"])
+			print("== spring[nodeB] == ", spring["nodeB"])
+			print("== node_b == ", node_b)
+			MindMapper.spawnGraphSpring(node_a, node_b)
+			print("--===============--")
 
 	
 func getNotesAsDict():
@@ -96,7 +121,6 @@ func getNotesAsDict():
 	return notesDict
 
 func getSpringsAsDict():
-	#print(self.name, " here's a list of springs and their nodes" )
 	var springsDict = {}
 	var springID = 0
 	for spring in GraphEdgeContainer.get_children():
@@ -105,14 +129,13 @@ func getSpringsAsDict():
 		springID += 1
 	return springsDict
 
-func findRecordByIDField(dict : Dictionary, idNum : float):
-	#print("WTF: Here's the dictionary ", dict)
+func findRecordByIDField(dict : Dictionary, idNum : int):
 	var result
-	for item in dict:
-		#print("item: ", item)
-		#print(dict.get(item))
-		if dict.get(item)["ID"] == idNum:
-			result = dict.get(item)
+	for i in dict:
+		var item = dict[i] 
+		if item["ID"] == str(idNum):
+			result = item
+	#breakpoint
 	return result # returning a dictionary
 
 func convertNotesDictToArray(notesDict):
@@ -123,6 +146,8 @@ func convertNotesDictToArray(notesDict):
 	var graphNotesArr : Array = []
 	for i in notesDict.size():
 		graphNotesArr.push_back(findRecordByIDField(notesDict, i))
+	
+	
 	return graphNotesArr # an array of dictionaries in the correct order
 
 
@@ -135,10 +160,6 @@ func _on_SaveDialog_file_selected(path):
 	saveFile(path)
 	#print(nodeDict)
 	
-#func _on_new_note_requested(nodeRequesting):
-#	var mindMapper = global.getRootSceneManager().getCurrentScene()
-#	if mindMapper.has_method("spawnNote"):
-#		spawnNote("", "", 1, nodeRequesting, nodeRequesting.get_global_position() + Vector2(0, -100), null)
 	
 
 

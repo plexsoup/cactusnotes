@@ -12,6 +12,7 @@ onready var TextEditBox = $TextEdit
 onready var RichTextDisplay = $TextEdit/ColorRect/RichTextLabel
 onready var ColorBG = $TextEdit/ColorRect
 onready var PhysicsParent = $".."
+var MindMapper
 
 var SaveLoadID
 
@@ -24,6 +25,8 @@ signal released_cactus()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	MindMapper = global.getRootSceneManager().getCurrentScene()
+	
 	TextEditBox.set_text("")
 	RichTextDisplay.set_bbcode(TextEditBox.get_text())
 	
@@ -48,6 +51,7 @@ func start(text : String, pos : Vector2, pinned : bool):
 		setState(STATES.pinned)
 	else:
 		setState(STATES.idle)
+	SaveLoadID = PhysicsParent.get_position_in_parent()
 
 func setState(state):
 	CurrentState = state
@@ -67,6 +71,9 @@ func getSaveData():
 	else:
 		myInfoDict["pinned"] = false
 
+	if SaveLoadID == null:
+		SaveLoadID = PhysicsParent.get_position_in_parent()
+		#SaveLoadID = MindMapper.get_node("graphNodes").get_position_in_parent(self) # THIS IS A HACK > someone should have set your ID by now!!!
 	myInfoDict["ID"] = SaveLoadID
 	
 	myInfoDict["Text"] = TextEditBox.get_text()
@@ -80,7 +87,7 @@ func loadSavedData(data : Dictionary):
 		setState(STATES.pinned)
 	else:
 		setState(STATES.idle)
-	SaveLoadID = int(data["ID"])
+	SaveLoadID = data["ID"]
 	TextEditBox.set_text(data["Text"])
 	
 	

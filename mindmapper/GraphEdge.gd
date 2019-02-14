@@ -24,6 +24,8 @@ func _ready():
 func getNodeID(node):
 	if node.has_node("StickyNote"):
 		return node.get_node("StickyNote").getID()
+	else:
+		print(self.name, ": something's wrong in getNodeID. ", node, " doesn't have a StickyNote" )
 
 func start(nodeA, nodeB):
 	set_node_a(get_path_to(nodeA))
@@ -43,18 +45,21 @@ func getSaveData():
 
 func loadSaveData(data):
 	
-	start(data["nodeA"], data["nodeB"])
+	start(MindMapper.getGraphNodeByID(data["nodeA"]), MindMapper.getGraphNodeByID(data["nodeB"]))
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	Ticks += 1
 	
-	if Ticks % 200 == 0:
-		print("node_a == ", get_node_a())
-		print("node_b == ", get_node_b())
-		if is_instance_valid(get_node(get_node_a())) and is_instance_valid(get_node(get_node_b())):
-			update()
+#	if Ticks % 200 == 0:
+#		print(self.name, ": node_a == ", get_node_a())
+#		print(self.name, ": node_b == ", get_node_b())
+
+		
+#	if is_instance_valid(get_node(get_node_a())):
+	if Ticks % 5 == 0:
+		update()
 
 func _draw():
 	var nodeAPos = Vector2(0,0)

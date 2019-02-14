@@ -13,12 +13,19 @@ var NextSceneNode
 func _ready():
 	global.setRootSceneManager(self)
 	spawnTitleScene()
+	establishBaseFont()
 	randomize()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
 
+func establishBaseFont():
+	var label = Label.new()
+	var baseFont = label.get_font("")
+	label.queue_free()
+	global.BaseFont = baseFont
+	
 func getCurrentScene():
 	return CurrentSceneNode
 
