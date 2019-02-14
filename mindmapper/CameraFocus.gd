@@ -101,7 +101,7 @@ func _process(delta):
 	
 func _draw():
 	var zoom = MyCamera.zoom.x
-	draw_string(global.BaseFont, $FocalPoint.position + Vector2(-15, -65.0), "Zoom: " + str(zoom), Color.antiquewhite)
+	draw_string(global.BaseFont, $FocalPoint.position + Vector2(-15, -65.0), "Zoom: " + str(zoom), Color(0.8, 1.0, 0.8, 0.5))
 
 func _on_picked_up_cactus(activeNode): # signal from StickyNote
 	ActiveNode = activeNode

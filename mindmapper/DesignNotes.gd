@@ -35,6 +35,9 @@ UI / UX:
 
 Bugs: 
 
+	- when you make a new note, a bunch of others lose their pin status
+	
+	
 	- after dragging canvas, the camera gets really speedy
 	- saving / loading is broken
 	

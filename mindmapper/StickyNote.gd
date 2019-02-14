@@ -55,6 +55,12 @@ func start(text : String, pos : Vector2, pinned : bool):
 
 func setState(state):
 	CurrentState = state
+	if state == STATES.pinned:
+		#PhysicsParent.set_mode(RigidBody.MODE_STATIC)
+		pass
+	else:
+		#PhysicsParent.set_mode(RigidBody.MODE_CHARACTER)
+		pass
 
 func setID(id): #Who's setting this?
 	SaveLoadID = id
@@ -84,8 +90,11 @@ func loadSavedData(data : Dictionary):
 	var newPos : Vector2 = str2var(data["pos"])
 	set_global_position(newPos)
 	if bool(data["pinned"]) == true:
+		print("loading pin data: ", data["pinned"])
+		PhysicsParent.set_mode(RigidBody2D.MODE_STATIC)
 		setState(STATES.pinned)
 	else:
+		PhysicsParent.set_mode(RigidBody2D.MODE_CHARACTER)
 		setState(STATES.idle)
 	SaveLoadID = data["ID"]
 	TextEditBox.set_text(data["Text"])
@@ -103,6 +112,8 @@ func _process(delta):
 func _on_TextEdit_mouse_entered():
 	ColorBG.hide()
 	TempPin = true
+	
+	# change the physics mode without changing our pin status
 	PhysicsParent.set_mode(RigidBody.MODE_STATIC)
 	TextEditBox.grab_focus()
 	TextEditBox.select_all()
@@ -111,8 +122,9 @@ func _on_TextEdit_mouse_exited():
 	TextEditBox.release_focus()
 	TempPin = false
 	ColorBG.show()
-	if CurrentState != STATES.pinned:
-		PhysicsParent.set_mode(RigidBody.MODE_CHARACTER)
+#	if CurrentState != STATES.pinned:
+#		PhysicsParent.set_mode(RigidBody.MODE_CHARACTER)
+	
 	
 
 
@@ -139,7 +151,7 @@ func _on_TextEdit_gui_input(event):
 		
 	
 	if event is InputEventMouseMotion and Input.is_action_pressed("drag_note") and CurrentState == STATES.dragging:
-		PhysicsParent.set_global_position(get_global_mouse_position())
+		PhysicsParent.call_deferred("set_global_position", get_global_mouse_position())
 
 	if TextEditBox.has_focus() and Input.is_action_just_pressed("spawn_note"):
 		emit_signal("new_note_requested", PhysicsParent)

@@ -103,15 +103,19 @@ func spawnGraphSpring(node_a, node_b):
 	return newSpring
 	
 func getGraphNodeByID(id):
+	print(self.name, " calling getGraphNodeByID: ", id )
+	var result
 	if id != null:
-		return GraphNodes.get_child(id)
+		result = GraphNodes.get_child(id)
 	else:
-		return AnchorNode
-	# For saving and loading games, this assumes that you've reinstated them in the same order as before.
+		result = AnchorNode
+	print("self.name, getGraphNodeByID: returning ", result)
+	return result
 
 func spawnGraphNode(attachedTo):
 	var newGraphNode = RigidBody2D.new()
-	newGraphNode.set_mode(RigidBody2D.MODE_CHARACTER)
+	#newGraphNode.set_mode(RigidBody2D.MODE_CHARACTER)
+	newGraphNode.set_mode(RigidBody2D.MODE_STATIC)
 	var newCircleShape = CircleShape2D.new()
 	newCircleShape.set_radius(75)
 	var newCollisionShape = CollisionShape2D.new()
@@ -147,10 +151,10 @@ func initializeGraphNode(node, text : String, pos : Vector2 , pinned : bool):
 	node.start(text, pos, pinned)
 
 
-func spawnNote(title, text, attachedTo, pinned: bool = false, newPosition : Vector2 = Vector2(0, 0), noteID : int = -1):
-	print(self.name, " spawnNote Called" )
-	var newNode = spawnGraphNode(attachedTo)
-	return newNode
+#func spawnNote(title, text, attachedTo, pinned: bool = false, newPosition : Vector2 = Vector2(0, 0), noteID : int = -1):
+#	print(self.name, " spawnNote Called" )
+#	var newNode = spawnGraphNode(attachedTo)
+#	return newNode
 
 
 
@@ -166,8 +170,10 @@ func getNewEdgeID():
 func cleanup():
 	# It's important that you remove the edges before you remove the nodes.
 	for spring in GraphEdges.get_children():
+		GraphEdges.remove_child(spring)
 		spring.queue_free()
 	for note in GraphNodes.get_children():
+		GraphNodes.remove_child(note)
 		note.queue_free()
 
 

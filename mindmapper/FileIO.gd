@@ -98,16 +98,11 @@ func spawnSpringsFromDict(springsDict : Dictionary):
 		print(self.name, " in loadFile: spring == ", spring )
 		
 		if MindMapper.has_method("spawnGraphSpring"):
-			print("--== look here ==--")
 			var node_a = MindMapper.getGraphNodeByID(spring["nodeA"])
-			print("== spring[nodeA] == ", spring["nodeA"] )
-			print("== node_a == ", node_a) 
 			var node_b = MindMapper.getGraphNodeByID(spring["nodeB"])
-			print("== spring[nodeB] == ", spring["nodeB"])
-			print("== node_b == ", node_b)
+			
 			MindMapper.spawnGraphSpring(node_a, node_b)
-			print("--===============--")
-
+			
 	
 func getNotesAsDict():
 	#print(self.name, " in getNotesAsDict. Here's the list of notes and their children.")
