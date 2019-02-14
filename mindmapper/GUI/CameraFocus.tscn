@@ -38,3 +38,15 @@ smoothing_enabled = true
 [node name="FocalPoint" type="Position2D" parent="."]
 position = Vector2( -2.30383, 0.831726 )
 
+[node name="SearchArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="SearchArea"]
+position = Vector2( 229.266, -109.813 )
+scale = Vector2( 4.97816, 2.77477 )
+polygon = PoolVector2Array( -3.15947, -110.601, 570.793, -820.955, 575.562, 901.114, -3.15947, 181.454 )
+
+[node name="Timer" type="Timer" parent="SearchArea"]
+wait_time = 0.05
+one_shot = true
+
+[connection signal="timeout" from="SearchArea/Timer" to="." method="_on_Timer_timeout"]

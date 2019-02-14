@@ -4,6 +4,7 @@ extends AnimatedSprite
 # Declare member variables here. Examples:
 
 enum STATES { passive, tracking, dragging, swiping, frozen }
+var StateStrings = ["passive", "tracking", "dragging", "swiping", "frozen"]
 	# swiping refers to the canvas. user is trying to drag the map, which moves the camera in the opposite direction of the cursor
 	# dragging refers to a cactus node. User is trying to move a node.
 	# tracking refers to a cactus node. User just spawned a node and the cursor should highlight it.
@@ -24,6 +25,8 @@ var StableProximity : float = 125 # don't rotate the avatar if you're inside thi
 var HaltProximitySq : float
 var StableProximitySq : float
 
+signal node_activated()
+signal node_deactivated()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -68,8 +71,75 @@ func moveToCactus(delta):
 	var destination = ActiveNode.get_global_position()
 	moveToDestination(delta, destination, speed)
 
+func rotateSearchArea(directionVector):
+	$SearchArea.look_at(get_global_position() + directionVector)
 	
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+func moveToNearestNode(directionVector):
+	rotateSearchArea(directionVector)
+	$SearchArea/Timer.start()
+	# the physics engine needs a moment to update the collision area.
+	# when the Timer ends, find nearest node will be called
+
+func findNearestNode():
+	# scan the field in the direction of Vector and get the closest cactus
+	var dist = 2048
+	var candidates = $SearchArea.get_overlapping_bodies()
+	var myPos = get_global_position()
+	print("ActiveNode == ", ActiveNode.name)
+	var bestCandidate
+	if candidates.size() > 0:
+		var nearestDistSq = pow(dist * 2, 2)
+		for candidate in candidates:
+			var candidatePos = candidate.get_global_position()
+			var thisDistSq = myPos.distance_squared_to(candidatePos)
+			if thisDistSq < nearestDistSq:
+				nearestDistSq = thisDistSq
+				bestCandidate = candidate
+		if bestCandidate != null and bestCandidate != ActiveNode:
+			print("found a new candidate", bestCandidate.name)
+			setActiveNode(bestCandidate)
+			setState(STATES.tracking)
+	if bestCandidate != null:
+		print(self.name, " bestCandidate == ", bestCandidate.name)
+
+func deactivateNode(node):
+	connect("node_deactivated", node.get_node("StickyNote"), "_on_CameraFocus_node_deactivated")
+	emit_signal("node_deactivated")
+	disconnect("node_deactivated", node.get_node("StickyNote"), "_on_CameraFocus_node_deactivated")
+	
+func setActiveNode(node):
+	if ActiveNode != null:
+		deactivateNode(ActiveNode)
+	
+	
+	if node.has_node("StickyNote"):
+		ActiveNode = node
+		connect("node_activated", node.get_node("StickyNote"), "_on_CameraFocus_node_activated")
+		emit_signal("node_activated")
+		disconnect("node_activated", node.get_node("StickyNote"), "_on_CameraFocus_node_activated")
+	
+	
+
+	
+func _input(event):
+	
+	var directionVector : Vector2
+	if event is InputEventKey and Input.is_action_just_pressed("node_up"):
+		directionVector = Vector2(0, -1)
+		moveToNearestNode(directionVector)
+	elif event is InputEventKey and Input.is_action_just_pressed("node_down"):
+		directionVector = Vector2(0, 1)
+		moveToNearestNode(directionVector)
+	elif event is InputEventKey and Input.is_action_just_pressed("node_left"):
+		directionVector = Vector2(-1, 0)
+		moveToNearestNode(directionVector)
+	elif event is InputEventKey and Input.is_action_just_pressed("node_right"):
+		directionVector = Vector2(1, 0)
+		moveToNearestNode(directionVector)
+		
+	
+	
+
 func _process(delta):
 
 	match CurrentState:
@@ -91,8 +161,8 @@ func _process(delta):
 			
 		STATES.tracking:
 			pretendToInspect()
-			var offsetVector = Vector2(0, 0).rotated(get_rotation())
-			set_global_position(ActiveNode.get_global_position() - offsetVector)
+			#getNodeNavigationRequests()
+			set_global_position(ActiveNode.get_global_position())
 
 		STATES.frozen:
 			pass
@@ -103,8 +173,11 @@ func _draw():
 	var zoom = MyCamera.zoom.x
 	draw_string(global.BaseFont, $FocalPoint.position + Vector2(-15, -65.0), "Zoom: " + str(zoom), Color(0.8, 1.0, 0.8, 0.5))
 
+	draw_string(global.BaseFont, $FocalPoint.position + Vector2(-15, -45.0), "State: " + StateStrings[CurrentState], Color.antiquewhite )
+
+
 func _on_picked_up_cactus(activeNode): # signal from StickyNote
-	ActiveNode = activeNode
+	setActiveNode(activeNode)
 	setState(STATES.dragging)
 	
 func _on_released_cactus(): # signal from StickyNote
@@ -116,7 +189,7 @@ func _on_camera_drag_requested():
 	setState(STATES.swiping)
 	
 func _on_node_spawned(node):
-	ActiveNode = node
+	setActiveNode(node)
 	setState(STATES.tracking)
 
 func _on_dialog_box_popup():
@@ -128,3 +201,6 @@ func _on_dialog_box_closed():
 		setState(PreviousStates.pop_back())
 	else:
 		setState(STATES.idle)
+
+func _on_Timer_timeout():
+	findNearestNode()

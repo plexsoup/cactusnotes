@@ -114,8 +114,8 @@ func getGraphNodeByID(id):
 
 func spawnGraphNode(attachedTo):
 	var newGraphNode = RigidBody2D.new()
-	#newGraphNode.set_mode(RigidBody2D.MODE_CHARACTER)
-	newGraphNode.set_mode(RigidBody2D.MODE_STATIC)
+	newGraphNode.set_mode(RigidBody2D.MODE_CHARACTER)
+	#newGraphNode.set_mode(RigidBody2D.MODE_STATIC)
 	var newCircleShape = CircleShape2D.new()
 	newCircleShape.set_radius(75)
 	var newCollisionShape = CollisionShape2D.new()
@@ -124,7 +124,7 @@ func spawnGraphNode(attachedTo):
 	
 	var newPos = Vector2(0,0)
 	if attachedTo != null:
-		newPos = attachedTo.get_global_position() + randOffset
+		newPos = to_local(attachedTo.get_global_position() + randOffset)
 	
 	newGraphNode.set_global_position(newPos)
 	

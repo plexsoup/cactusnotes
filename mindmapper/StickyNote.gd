@@ -111,11 +111,15 @@ func loadSavedData(data : Dictionary):
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
+	update()
 	
+func _draw():
+	
+	var offsetVector = Vector2(-25, 125)
+	draw_string(global.BaseFont, to_local(PhysicsParent.get_global_position()) + offsetVector, PhysicsParent.name, Color.darkgreen)
 
 
-func _on_TextEdit_mouse_entered():
+func enterTextEditMode():
 	ColorBG.hide()
 	TempPin = true
 	
@@ -123,24 +127,23 @@ func _on_TextEdit_mouse_entered():
 	PhysicsParent.set_mode(RigidBody.MODE_STATIC)
 	TextEditBox.grab_focus()
 	TextEditBox.select_all()
-	
-func _on_TextEdit_mouse_exited():
+
+func exitTextEditMode():
 	TextEditBox.release_focus()
 	TempPin = false
 	ColorBG.show()
-#	if CurrentState != STATES.pinned:
-#		PhysicsParent.set_mode(RigidBody.MODE_CHARACTER)
+	if CurrentState != STATES.pinned:
+		PhysicsParent.set_mode(RigidBody.MODE_CHARACTER)
+
+func _on_TextEdit_mouse_entered():
+	enterTextEditMode()
+		
+func _on_TextEdit_mouse_exited():
+	exitTextEditMode()
 	
-	
-
-
-
 
 func _on_TextEdit_text_changed():
 	RichTextDisplay.set_bbcode(TextEditBox.get_text())
-
-
-
 
 
 func _on_TextEdit_gui_input(event):
@@ -164,3 +167,9 @@ func _on_TextEdit_gui_input(event):
 
 func _on_NewNoteButton_pressed():
 	emit_signal("new_note_requested", PhysicsParent)
+
+func _on_CameraFocus_node_activated():
+	enterTextEditMode()
+	
+func _on_CameraFocus_node_deactivated():
+	exitTextEditMode()
