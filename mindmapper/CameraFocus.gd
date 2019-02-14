@@ -204,3 +204,16 @@ func _on_dialog_box_closed():
 
 func _on_Timer_timeout():
 	findNearestNode()
+
+func _on_mainGUI_mouse_entered_button_area():
+	setState(STATES.frozen)
+	PreviousStates.push_back(CurrentState)
+	
+func _on_mainGUI_mouse_exited_button_area():
+	if PreviousStates.size() > 0:
+		setState(PreviousStates.pop_back())
+	else:
+		setState(STATES.idle)
+	
+
+

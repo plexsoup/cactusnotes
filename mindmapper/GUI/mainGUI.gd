@@ -18,11 +18,15 @@ onready var FileIO = get_node("FileIO")
 
 signal dialog_box_popup()
 signal dialog_box_closed()
+signal mouse_entered_button_area()
+signal mouse_exited_button_area()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	connect("dialog_box_popup", CameraFocus, "_on_dialog_box_popup")
 	connect("dialog_box_closed", CameraFocus, "_on_dialog_box_closed")
+	connect("mouse_entered_button_area", CameraFocus, "_on_mainGUI_mouse_entered_button_area")
+	connect("mouse_exited_button_area", CameraFocus, "_on_mainGUI_mouse_exited_button_area")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
@@ -33,10 +37,15 @@ func _ready():
 		
 
 func spawnDialogBox(textArray):
+	var DialogBoxContainer = get_node("DialogBoxes")
+
+	for box in DialogBoxContainer.get_children():
+		box.queue_free()
+	
 	emit_signal("dialog_box_popup")
 	var dialogBoxScene = preload("res://DialogBox.tscn")
 	var newDialogBox = dialogBoxScene.instance()
-	$DialogBoxes.add_child(newDialogBox)
+	DialogBoxContainer.add_child(newDialogBox)
 	
 	newDialogBox.start(textArray, self)
 
@@ -118,3 +127,38 @@ func _on_LoadDialog_popup_hide():
 	emit_signal("dialog_box_closed")
 	if CurrentCamera.has_method("enableZoom"):
 		CurrentCamera.enableZoom()
+
+
+func _on_MouseSafeZone_mouse_entered():
+	#tell the CameraFocus to stop moving
+	print("entering mouse safe zone")
+	emit_signal("mouse_entered_button_area")
+
+
+func _on_MouseSafeZone_mouse_exited():
+	print("leaving mouse safe zone")
+	emit_signal("mouse_exited_button_area")
+
+
+
+
+
+func _on_TimedChallengeTimer_timeout():
+	var textArr = [
+		"Thus ends the timed challenge.",
+		"Let's hope it was productive, and fun.",
+		"If you generated some ideas, consider defending them in a raptor challenge next."
+	]
+	spawnDialogBox(textArr)
+	$CanvasLayer/TimeChallengeButton/TimedChallengeTimer/TimerCountdown.hide()
+
+
+func _on_TimeChallengeButton_pressed():
+	var time = $CanvasLayer/TimeChallengeButton/TimedChallengeTimer.get_wait_time()
+	var textArr = [
+		"It's said that time pressure can stimulate creativity. \n\nCome up with a project or concept you need to brainstorm. \n\nYou have " + str(time) + " seconds to generate as many ideas as possible."
+	]
+	
+	spawnDialogBox(textArr)
+	$CanvasLayer/TimeChallengeButton/TimedChallengeTimer.start()
+	$CanvasLayer/TimeChallengeButton/TimedChallengeTimer/TimerCountdown.show()

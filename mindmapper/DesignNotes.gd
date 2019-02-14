@@ -34,13 +34,8 @@ UI / UX:
 
 
 Bugs: 
-
-	- when you make a new note, a bunch of others lose their pin status
-	
-	
-	- after dragging canvas, the camera gets really speedy
-	- saving / loading is broken
-	
+	- User can open multiple dialog boxes at once.
+		- make any existing boxes go away when you open a new one.
 	
 
 Features Required / User Stories:
