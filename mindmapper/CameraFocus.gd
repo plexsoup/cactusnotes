@@ -85,7 +85,7 @@ func findNearestNode():
 	var dist = 2048
 	var candidates = $SearchArea.get_overlapping_bodies()
 	var myPos = get_global_position()
-	print("ActiveNode == ", ActiveNode.name)
+	#print("ActiveNode == ", ActiveNode.name)
 	var bestCandidate
 	if candidates.size() > 0:
 		var nearestDistSq = pow(dist * 2, 2)
@@ -96,11 +96,10 @@ func findNearestNode():
 				nearestDistSq = thisDistSq
 				bestCandidate = candidate
 		if bestCandidate != null and bestCandidate != ActiveNode:
-			print("found a new candidate", bestCandidate.name)
+			#print("found a new candidate", bestCandidate.name)
 			setActiveNode(bestCandidate)
 			setState(STATES.tracking)
-	if bestCandidate != null:
-		print(self.name, " bestCandidate == ", bestCandidate.name)
+	
 
 func deactivateNode(node):
 	connect("node_deactivated", node.get_node("StickyNote"), "_on_CameraFocus_node_deactivated")
@@ -141,7 +140,11 @@ func _input(event):
 	
 
 func _process(delta):
-
+#	if get_viewport().get_mouse_position().y > 500:
+#		return # ignore mouse requests if you're near the button bar.
+		# ^^^ THIS IS A HACK. Needs a better, long-term solution
+		
+		
 	match CurrentState:
 		STATES.passive:
 			# move the avatar (magnifying glass) towards the mouse cursor
@@ -164,8 +167,8 @@ func _process(delta):
 			#getNodeNavigationRequests()
 			set_global_position(ActiveNode.get_global_position())
 
-		STATES.frozen:
-			pass
+		STATES.frozen: # there's a dialog box open
+			pass 
 			
 	update()
 	
@@ -173,7 +176,7 @@ func _draw():
 	var zoom = MyCamera.zoom.x
 	draw_string(global.BaseFont, $FocalPoint.position + Vector2(-15, -65.0), "Zoom: " + str(zoom), Color(0.8, 1.0, 0.8, 0.5))
 
-	draw_string(global.BaseFont, $FocalPoint.position + Vector2(-15, -45.0), "State: " + StateStrings[CurrentState], Color.antiquewhite )
+	#draw_string(global.BaseFont, $FocalPoint.position + Vector2(-15, -45.0), "State: " + StateStrings[CurrentState], Color.antiquewhite )
 
 
 func _on_picked_up_cactus(activeNode): # signal from StickyNote
@@ -217,3 +220,11 @@ func _on_mainGUI_mouse_exited_button_area():
 	
 
 
+
+
+func _on_BurnArea_body_entered(body):
+	if body.is_in_group("enemies"):
+		if body.has_method("_on_burn"):
+			var damage = 10
+			body._on_burn(damage)
+			

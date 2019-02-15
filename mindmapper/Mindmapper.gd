@@ -82,7 +82,8 @@ func getGraphNodeID(node):
 	if node.has_node("StickyNote"):
 		return node.get_node("StickyNote").getID()
 	else:
-		print(self.name, ": error calling getGraphNodeID. ", node, " doesn't have a StickyNote" )
+		#print(self.name, ": error calling getGraphNodeID. ", node, " doesn't have a StickyNote" )
+		pass
 
 func spawnGraphSpring(node_a, node_b):
 	# Create the Spring
@@ -91,9 +92,9 @@ func spawnGraphSpring(node_a, node_b):
 	GraphEdges.add_child(newSpring)
 	newSpring.start(node_a, node_b)
 
-	print(self.name, " spawnGraphSpring ", newSpring )
-	print("node_a = ", newSpring.get_node_a(), " == ", newSpring.get_node(newSpring.get_node_a()) )
-	print("node_b = ", newSpring.get_node_b(), " == ", newSpring.get_node(newSpring.get_node_b()))
+#	print(self.name, " spawnGraphSpring ", newSpring )
+#	print("node_a = ", newSpring.get_node_a(), " == ", newSpring.get_node(newSpring.get_node_a()) )
+#	print("node_b = ", newSpring.get_node_b(), " == ", newSpring.get_node(newSpring.get_node_b()))
 	
 	if node_a is RigidBody2D:
 		node_a.set_sleeping(false)
@@ -103,13 +104,13 @@ func spawnGraphSpring(node_a, node_b):
 	return newSpring
 	
 func getGraphNodeByID(id):
-	print(self.name, " calling getGraphNodeByID: ", id )
+	#print(self.name, " calling getGraphNodeByID: ", id )
 	var result
 	if id != null:
 		result = GraphNodes.get_child(id)
 	else:
 		result = AnchorNode
-	print("self.name, getGraphNodeByID: returning ", result)
+	#print("self.name, getGraphNodeByID: returning ", result)
 	return result
 
 func spawnGraphNode(attachedTo):
@@ -169,7 +170,10 @@ func getNewNoteID():
 func getNewEdgeID():
 	return GraphEdges.get_child_count()
 
-
+func getRandomGraphNode():
+	return GraphNodes.get_child(randi()%GraphNodes.get_child_count())
+	
+	
 
 func cleanup():
 	# It's important that you remove the edges before you remove the nodes.

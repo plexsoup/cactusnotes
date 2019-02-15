@@ -57,14 +57,6 @@ script = ExtResource( 2 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="MouseSafeZone" type="ColorRect" parent="CanvasLayer"]
-margin_left = 240.0
-margin_top = 500.0
-margin_right = 830.0
-margin_bottom = 600.0
-mouse_filter = 1
-color = Color( 0.027451, 0.352941, 0, 0.270588 )
-
 [node name="SaveButton" type="TextureButton" parent="CanvasLayer"]
 editor/display_folded = true
 margin_left = 380.0
@@ -153,7 +145,6 @@ texture_hover = ExtResource( 10 )
 expand = true
 
 [node name="Label" type="Label" parent="CanvasLayer/TimeChallengeButton"]
-visible = false
 margin_left = 1.32684
 margin_top = 71.8749
 margin_right = 63.3268
@@ -208,8 +199,8 @@ text = "About"
 [node name="CameraDolly" type="Position2D" parent="."]
 script = ExtResource( 17 )
 
-[connection signal="mouse_entered" from="CanvasLayer/MouseSafeZone" to="." method="_on_MouseSafeZone_mouse_entered"]
-[connection signal="mouse_exited" from="CanvasLayer/MouseSafeZone" to="." method="_on_MouseSafeZone_mouse_exited"]
+[node name="Raptors" type="Node2D" parent="."]
+
 [connection signal="pressed" from="CanvasLayer/SaveButton" to="." method="_on_SaveButton_pressed"]
 [connection signal="pressed" from="CanvasLayer/LoadButton" to="." method="_on_LoadButton_pressed"]
 [connection signal="file_selected" from="CanvasLayer/SaveDialog" to="FileIO" method="_on_SaveDialog_file_selected"]
@@ -219,4 +210,5 @@ script = ExtResource( 17 )
 [connection signal="pressed" from="CanvasLayer/HelpButton" to="." method="_on_HelpButton_pressed"]
 [connection signal="pressed" from="CanvasLayer/TimeChallengeButton" to="." method="_on_TimeChallengeButton_pressed"]
 [connection signal="timeout" from="CanvasLayer/TimeChallengeButton/TimedChallengeTimer" to="." method="_on_TimedChallengeTimer_timeout"]
+[connection signal="pressed" from="CanvasLayer/DefenseChallengeButton" to="." method="_on_DefenseChallengeButton_pressed"]
 [connection signal="button_down" from="CanvasLayer/AboutCactusNotesButton" to="." method="_on_AboutCactusNotesButton_button_down"]

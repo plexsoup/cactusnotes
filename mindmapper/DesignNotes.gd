@@ -34,9 +34,7 @@ UI / UX:
 
 
 Bugs: 
-	- User can open multiple dialog boxes at once.
-		- make any existing boxes go away when you open a new one.
-	
+	- When the mouse
 
 Features Required / User Stories:
 
