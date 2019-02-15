@@ -34,15 +34,24 @@ UI / UX:
 
 
 Bugs: 
-	- When the mouse
-
-Features Required / User Stories:
-
-
+	- nodes are spawning in static mode instead of character mode.
+	
 
 Game Feel / UX Improvements:
-	- should be able to navigate the node-web by keyboard.
-	- zoom out should zoom towards mouse cursor. 
+	- set the raptors to random start anim frame.
+	- give the raptors a minimum distance so they don't jitter
+	
+	
+	- add some harm for cactuses when the raptors touch them. Maybe disconnect their edges?
+	- add a mechanism for players to connect new edges
+	
+	- notes should radiate away from the anchor-node.
+	- add some extents to the map. Why can the magnifying glass fly infinietely away from the anchornode?
+	
+	- notes should try and occupy empty space. Maybe add a slight repulsion force to them.
+	
+Refactoring / Architecture Improvements:
+	- Figure out the collision bits and masks. Cactuses (RigidBody2d) have their set in code.
 
 """
 

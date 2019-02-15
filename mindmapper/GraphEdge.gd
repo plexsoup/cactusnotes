@@ -39,6 +39,17 @@ func start(nodeA, nodeB):
 	set_stiffness(200)
 	set_damping(1)
 
+func isConnectedTo(node):
+	if get_node(get_node_a()) == node or get_node(get_node_b()) == node:
+		return true
+	else:
+		return false
+
+func removeNodeConnection(node):
+	if get_node(get_node_a()) == node:
+		set_node_a("")
+	if get_node(get_node_b()) == node:
+		set_node_b("")
 	
 func getSaveData():
 	return { "node_a_id": Node_A_ID, "node_b_id": Node_B_ID }

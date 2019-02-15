@@ -86,7 +86,7 @@ func _on_LoadButton_pressed():
 
 func _on_HelpButton_pressed():
 	var DialogTextArr = [
-		"Click and drag to move a note. Click the flower or press ctrl-n to spawn a new note.\n\n New notes will grab focus, so you can start typing into them right away."
+		"Click and drag to move a note. Use the magnifying glass with the mouse or arrow keys to select a new note. \n\nClick the flower or press ctrl-n to spawn a new note.\n\nIf the magnifying glass is locked onto a note, you can click on any empty space to free it."
 	]
 	spawnDialogBox(DialogTextArr)
 
@@ -108,7 +108,7 @@ func _on_Background_gui_input(event):
 func _on_AboutCactusNotesButton_button_down():
 	var DialogTextArr = [
 		"Cactus Notes is a mindmapping / brainstorming application developed for the Sixth Godot Wild Game Jam. It was intended as a replacement for paper and whiteboards, for use in the Game Design planning process...",
-		"... at least, that was the intention. It turned out to be more of a conspiracy board application.",
+		"... at least, that was the intention. It turns out it's also a great for building conspiracy walls. Red yarn will come in a future DLC.",
 		"Source code is available at [url]https://github.com/plexsoup/[/url]",
 		"Thanks for trying it!"
 	]
@@ -157,9 +157,10 @@ func _on_TimedChallengeTimer_timeout():
 	]
 	spawnDialogBox(textArr)
 	$CanvasLayer/TimeChallengeButton/TimedChallengeTimer/TimerCountdown.hide()
-
+	$"CanvasLayer/TimeChallengeButton/Warning Label".hide()
 
 func _on_TimeChallengeButton_pressed():
+	$"CanvasLayer/TimeChallengeButton/Warning Label".show()
 	var time = $CanvasLayer/TimeChallengeButton/TimedChallengeTimer.get_wait_time()
 	var textArr = [
 		"It's said that time pressure can stimulate creativity. \n\nCome up with a project or concept you need to brainstorm. \n\nYou have " + str(time) + " seconds to generate as many ideas as possible."
@@ -181,11 +182,18 @@ func spawnRaptor():
 	$Raptors.add_child(newRaptor)
 
 func _on_DefenseChallengeButton_pressed():
+	var button = $CanvasLayer/DefenseChallengeButton
+	var startTimer = button.get_node("DefenseChallengeStartTimer")
+	startTimer.start()
+	button.get_node("WarningLabel").show()
 	var textArr = [
 		"To identify which of your ideas are most important... \n\nsuddenly Dinosaurs! \n\nDefend your thoughts!"
 	]
-	# print("starting raptor challenge")
-	var numRaptors = 50
+	spawnDialogBox(textArr)
+
+func _on_DefenseChallengeStartTimer_timeout():
+	$CanvasLayer/DefenseChallengeButton/WarningLabel.hide()
+	var numRaptors = 150
 	for i in range(numRaptors):
 		spawnRaptor()
-
+	

@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/munch2.ogg-4bacabd8b072fd58602b00ee1ec21ec4.oggstr"
+
+[deps]
+
+source_file="res://effects/munch2.ogg"
+dest_files=[ "res://.import/munch2.ogg-4bacabd8b072fd58602b00ee1ec21ec4.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

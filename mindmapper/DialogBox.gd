@@ -108,12 +108,16 @@ func _on_LetterTimer_timeout():
 
 
 
-
+# allow the user to left-click on the dialog box to proceed.
+# (but not mouse-wheel!)
 func _on_ColorRect_gui_input(event):
 	if event is InputEventMouseButton and event.is_pressed():
-		revealAllLettersOrShowNextLine()
+		if event.button_index == BUTTON_LEFT:
+			revealAllLettersOrShowNextLine()
 
 
 func _on_DialogTextBox_gui_input(event):
 	if event is InputEventMouseButton and event.is_pressed():
-		revealAllLettersOrShowNextLine()
+		if event.button_index == BUTTON_LEFT:
+			revealAllLettersOrShowNextLine()
+			

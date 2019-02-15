@@ -222,9 +222,23 @@ func _on_mainGUI_mouse_exited_button_area():
 
 
 
-func _on_BurnArea_body_entered(body):
-	if body.is_in_group("enemies"):
-		if body.has_method("_on_burn"):
-			var damage = 10
-			body._on_burn(damage)
+#func _on_BurnArea_body_entered(body):
+#	if body.is_in_group("enemies"):
+#		if body.has_method("_on_burn"):
+#			var damage = 10
+#			body._on_burn(damage)
 			
+
+
+func _on_BurnArea_area_entered(area):
+	if area.is_in_group("enemies"):
+		if area.has_method("_on_burn"):
+			var damage = 10
+			area._on_burn(damage)
+			
+func _on_cactus_died(cactusNode):
+	if ActiveNode == cactusNode:
+		if CurrentState != STATES.frozen:
+			setState(STATES.passive)
+		ActiveNode = null
+	

@@ -8,9 +8,8 @@ export var IntroTextArr = [
 	"[b]This[/b] requires an explanation... \n\n[right][i]Press enter or space to continue, escape to skip.[/i][/right]",
 	"For creative professionals, when facing a new project, the mind can seem like a desert, bereft of ideas. \n\nCactus Notes will help ideas flourish, like little cacti.",
 
-	"Once we get started, you'll see a cactus. Click on the flower to create a new note. \n\nClick and drag a note to move it.",
-	
-	"If you're looking for more inspiration, you can select an additional challenge mode. Consider a timed challenge or a defense challenge."
+	"Once we get started, you'll see a cactus. You can type on it, or you can click on the flower to create a new note. \n\nClick and drag a note to move it to a better location.",
+	"Fill the space with your ideas. \nIf you're looking for more inspiration, you can select an additional challenge mode from the button bar."
 
 ]
 

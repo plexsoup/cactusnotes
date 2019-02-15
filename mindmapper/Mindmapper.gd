@@ -21,9 +21,11 @@ Refactor Notes:
 extends Node2D
 
 # Declare member variables here. Examples:
-onready var RigidBodyNote = preload("res://RigidBodyNote.tscn")
+
+#onready var RigidBodyNote = preload("res://RigidBodyNote.tscn")
 onready var GraphEdge = preload("res://GraphEdge.tscn")
 onready var NoteGUI = preload("res://NoteGUI.tscn")
+onready var NewGraphNodeScene = preload("res://RigidBodyCactus.tscn")
 
 #onready var NotesContainer = get_node("SpawnedNodes")
 #onready var SpringsContainer = get_node("SpawnedEdges")
@@ -74,9 +76,12 @@ func spawnAnchor():
 	AnchorNode = anchorNode
 	return anchorNode
 
+func getAnchorNode():
+	return AnchorNode
 
 func spawnFirstNote():
-	spawnGraphNode(AnchorNode)
+	var firstNode = spawnGraphNode(AnchorNode)
+	firstNode.get_node("StickyNote").setText("Type your first [b]big idea[/b] here. Then click the flower.")
 	
 func getGraphNodeID(node):
 	if node.has_node("StickyNote"):
@@ -114,8 +119,12 @@ func getGraphNodeByID(id):
 	return result
 
 func spawnGraphNode(attachedTo):
-	var newGraphNode = RigidBody2D.new()
+	#var newGraphNode = RigidBody2D.new()
+	
+	var newGraphNode = NewGraphNodeScene.instance()
 	newGraphNode.set_mode(RigidBody2D.MODE_CHARACTER)
+	newGraphNode.set_collision_layer_bit(1, true)
+	newGraphNode.set_collision_mask_bit(2, true)
 	#newGraphNode.set_mode(RigidBody2D.MODE_STATIC)
 	var newCircleShape = CircleShape2D.new()
 	newCircleShape.set_radius(75)
@@ -137,8 +146,11 @@ func spawnGraphNode(attachedTo):
 	var newStickyNote = stickyNote.instance()
 	
 	newGraphNode.add_child(newStickyNote)
-
-	newStickyNote.setID(newGraphNode.get_position_in_parent())
+	var newID = GraphNodes.get_child_count()
+#	var newID = newGraphNode.get_position_in_parent()
+	newStickyNote.setID(newID)
+	newGraphNode.set_name("CactusNode-" + str(newID))
+	print(self.name, " newGraphNode.name == ", newGraphNode.name)
 	#print("New Graph Node: ID == ", newStickyNote.getID())
 
 
@@ -195,11 +207,14 @@ func _draw():
 	for spring in GraphEdges.get_children():
 		var nodeA = spring.get_node(spring.get_node_a())
 		var nodeB = spring.get_node(spring.get_node_b())
-		
-		var nodeAPos = to_local(nodeA.get_global_position())
-		var nodeBPos = to_local(nodeB.get_global_position())
-		
-		draw_line(nodeAPos, nodeBPos, Color.burlywood, 3.0, true)
+		var nodeAPos = Vector2(0,0)
+		var nodeBPos = Vector2(0,0)
+		if is_instance_valid(nodeA):
+			nodeAPos = to_local(nodeA.get_global_position())
+		if is_instance_valid(nodeB):
+			nodeBPos = to_local(nodeB.get_global_position())
+		if is_instance_valid(nodeA) and is_instance_valid(nodeB):
+			draw_line(nodeAPos, nodeBPos, Color.burlywood, 3.0, true)
 
 
 func _on_flower_new_note_requested(requestingNode): # coming from the UI on one of the existing notes
@@ -228,6 +243,24 @@ func _on_TextureRect_gui_input(event):
 	if event is InputEventMouseButton and Input.is_action_just_pressed("drag_camera"):
 		#print("user would like to drag the camera view")
 		emit_signal("camera_drag_requested")
+
+func _on_cactus_died(cactusNode):
+	# find edges connected to Cactus.
+	# remove them
+	# then queue the cactus free
+	# and make sure CameraFocus is aware of the change
+	# Raptors already check for dead cacti
+	for edge in GraphEdges.get_children():
+		# ask the edge if it's connected to node
+		if edge.isConnectedTo(cactusNode):
+			edge.removeNodeConnection(cactusNode)
+			GraphEdges.remove_child(edge)
+			edge.queue_free()
+			
+		#GraphNodes.remove_child(cactusNode)
+		#cactusNode.call_deferred("queue_free")
+		# Something's not right when we free the cactus.
+		
 
 func _on_cleanup_requested():
 	cleanup()

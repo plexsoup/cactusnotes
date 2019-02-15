@@ -1,17 +1,18 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://DialogBox.gd" type="Script" id=1]
 [ext_resource path="res://effects/Dialog.Typing.ogg" type="AudioStream" id=2]
-[ext_resource path="res://fonts/LibreBaskerville-Regular.ttf" type="DynamicFontData" id=3]
-[ext_resource path="res://fonts/LibreBaskerville-Bold.ttf" type="DynamicFontData" id=4]
-[ext_resource path="res://fonts/LibreBaskerville-Italic.ttf" type="DynamicFontData" id=5]
+[ext_resource path="res://fonts/stickyNoteTheme.tres" type="Theme" id=3]
+[ext_resource path="res://fonts/LibreBaskerville-Regular.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://fonts/LibreBaskerville-Bold.ttf" type="DynamicFontData" id=5]
+[ext_resource path="res://fonts/LibreBaskerville-Italic.ttf" type="DynamicFontData" id=6]
 
 [sub_resource type="DynamicFont" id=1]
 
 size = 22
 outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 3 )
+font_data = ExtResource( 4 )
 
 [sub_resource type="Theme" id=2]
 
@@ -22,35 +23,35 @@ default_font = SubResource( 1 )
 size = 22
 outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 3 )
+font_data = ExtResource( 4 )
 
 [sub_resource type="DynamicFont" id=4]
 
 size = 22
 outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 4 )
+font_data = ExtResource( 5 )
 
 [sub_resource type="DynamicFont" id=5]
 
 size = 22
 outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 5 )
+font_data = ExtResource( 6 )
 
 [sub_resource type="DynamicFont" id=6]
 
 size = 22
 outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 4 )
+font_data = ExtResource( 5 )
 
 [sub_resource type="DynamicFont" id=7]
 
 size = 22
 outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 3 )
+font_data = ExtResource( 4 )
 
 [node name="DialogBox" type="Control"]
 anchor_right = 1.0
@@ -78,7 +79,8 @@ margin_left = -424.5
 margin_top = -150.0
 margin_right = 424.5
 margin_bottom = 150.0
-color = Color( 0, 0, 0, 0.501961 )
+theme = ExtResource( 3 )
+color = Color( 0.235294, 0.164706, 0.0196078, 0.772549 )
 
 [node name="DialogTextBox" type="RichTextLabel" parent="."]
 anchor_left = 0.5

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Raptor.gd" type="Script" id=1]
 [ext_resource path="res://enemies/pterosaur1.png" type="Texture" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://enemies/pterosaur3.png" type="Texture" id=4]
 [ext_resource path="res://effects/fireSpritesheet.png" type="Texture" id=5]
 [ext_resource path="res://effects/sizzle.wav" type="AudioStream" id=6]
+[ext_resource path="res://effects/munch1.ogg" type="AudioStream" id=7]
 
 [sub_resource type="SpriteFrames" id=1]
 
@@ -50,7 +51,7 @@ tracks/1/keys = {
 "values": [ 1, 19 ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("AudioStreamPlayer2D:playing")
+tracks/2/path = NodePath("burningNoise:playing")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -62,7 +63,7 @@ tracks/2/keys = {
 "values": [ false, true ]
 }
 tracks/3/type = "value"
-tracks/3/path = NodePath("AudioStreamPlayer2D:volume_db")
+tracks/3/path = NodePath("burningNoise:volume_db")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/imported = false
@@ -74,8 +75,9 @@ tracks/3/keys = {
 "values": [ -9.81, -13.788, -43.908 ]
 }
 
-[node name="Raptor" type="KinematicBody2D"]
-collision_layer = 2
+[node name="Raptor" type="Area2D"]
+collision_layer = 3
+collision_mask = 3
 script = ExtResource( 1 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
@@ -83,7 +85,7 @@ position = Vector2( -10.32, -12.7 )
 scale = Vector2( 0.25, 0.25 )
 frames = SubResource( 1 )
 animation = "flying"
-playing = true
+frame = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 2 )
@@ -101,7 +103,11 @@ region_filter_clip = true
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/burn = SubResource( 3 )
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+[node name="burningNoise" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 6 )
 volume_db = -9.81
 
+[node name="munchingNoise" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 7 )
+
+[connection signal="body_entered" from="." to="." method="_on_Raptor_body_entered"]

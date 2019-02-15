@@ -53,7 +53,7 @@ func _ready():
 
 func start(text : String, pos : Vector2, pinned : bool):
 	TextEditBox.set_text(text)
-	RichTextDisplay.set_bbcode(text)
+	RichTextDisplay.set_bbcode(TextEditBox.get_text())
 	set_global_position(pos)
 	if pinned == true:
 		setState(STATES.pinned)
@@ -69,6 +69,10 @@ func setState(state):
 	else:
 		#PhysicsParent.set_mode(RigidBody.MODE_CHARACTER)
 		pass
+
+func setText(text):
+	TextEditBox.set_text(text)
+	RichTextDisplay.set_bbcode(TextEditBox.get_text())
 
 func setID(id): #Who's setting this?
 	SaveLoadID = id
@@ -110,13 +114,13 @@ func loadSavedData(data : Dictionary):
 	
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	update()
-	
-func _draw():
-	
-	var offsetVector = Vector2(-25, 125)
-	draw_string(global.BaseFont, to_local(PhysicsParent.get_global_position()) + offsetVector, PhysicsParent.name, Color.darkgreen)
+#func _process(delta):
+#	update()
+#
+#func _draw():
+#
+#	var offsetVector = Vector2(-25, 125)
+#	draw_string(global.BaseFont, to_local(PhysicsParent.get_global_position()) + offsetVector, PhysicsParent.name, Color.darkgreen)
 
 
 func enterTextEditMode():

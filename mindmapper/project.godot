@@ -101,9 +101,15 @@ node_down={
  ]
 }
 
+[layer_names]
+
+2d_physics/layer_1="Cacti"
+2d_physics/layer_2="Raptors"
+
 [physics]
 
 2d/default_gravity_vector=Vector2( 0, -1 )
+3d/default_gravity=0.25
 
 [rendering]
 

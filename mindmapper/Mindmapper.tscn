@@ -1,10 +1,12 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Mindmapper.gd" type="Script" id=1]
 [ext_resource path="res://DesignNotes.gd" type="Script" id=2]
-[ext_resource path="res://scenery/dunes.jpg" type="Texture" id=3]
-[ext_resource path="res://GUI/mainGUI.tscn" type="PackedScene" id=4]
-[ext_resource path="res://GUI/CameraFocus.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenery/leather.png" type="Texture" id=3]
+[ext_resource path="res://scenery/fog2.png" type="Texture" id=4]
+[ext_resource path="res://scenery/dust2.png" type="Texture" id=5]
+[ext_resource path="res://GUI/mainGUI.tscn" type="PackedScene" id=6]
+[ext_resource path="res://GUI/CameraFocus.tscn" type="PackedScene" id=7]
 
 [node name="Mindmapper" type="Node2D"]
 position = Vector2( 512.329, 301.943 )
@@ -21,8 +23,31 @@ layer = -1
 [node name="TextureRect" type="TextureRect" parent="bgGUI/CanvasLayer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_bottom = 424.0
 texture = ExtResource( 3 )
 expand = true
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="bgGUI/CanvasLayer"]
+
+[node name="FarParallaxLayer" type="ParallaxLayer" parent="bgGUI/CanvasLayer/ParallaxBackground"]
+motion_scale = Vector2( 0.5, 0.5 )
+
+[node name="fog" type="Sprite" parent="bgGUI/CanvasLayer/ParallaxBackground/FarParallaxLayer"]
+self_modulate = Color( 1, 1, 1, 0.721569 )
+scale = Vector2( 21.2239, 18.0195 )
+texture = ExtResource( 4 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 4096, 4096 )
+
+[node name="NearParallaxLayer2" type="ParallaxLayer" parent="bgGUI/CanvasLayer/ParallaxBackground"]
+motion_scale = Vector2( 0.75, 0.75 )
+
+[node name="dust" type="Sprite" parent="bgGUI/CanvasLayer/ParallaxBackground/NearParallaxLayer2"]
+self_modulate = Color( 1, 1, 1, 0.25098 )
+scale = Vector2( 5, 5 )
+texture = ExtResource( 5 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 16384, 16384 )
 
 [node name="FirstNoteSpawnPoint" type="Position2D" parent="."]
 position = Vector2( -5.57306, 183.999 )
@@ -31,8 +56,8 @@ position = Vector2( -5.57306, 183.999 )
 
 [node name="graphNodes" type="Node2D" parent="."]
 
-[node name="mainGUI" parent="." instance=ExtResource( 4 )]
+[node name="mainGUI" parent="." instance=ExtResource( 6 )]
 
-[node name="CameraFocus" parent="." instance=ExtResource( 5 )]
+[node name="CameraFocus" parent="." instance=ExtResource( 7 )]
 
 [connection signal="gui_input" from="bgGUI/CanvasLayer/TextureRect" to="." method="_on_TextureRect_gui_input"]

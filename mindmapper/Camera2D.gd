@@ -60,6 +60,10 @@ func _physics_process(delta):
 		#CameraFocus.set_global_position(currentMousePosition)
 	
 func _input(event):
+	if CameraFocus.getState() == CameraFocus.STATES.frozen:
+		#don't zoom the camera during dialog box popups
+		return
+		
 	#print(self.name, " zoom == ", get_zoom() )
 	if event.is_action_pressed("zoom_in") == true and ZoomAllowed == true:
 		zoomToCursor()
