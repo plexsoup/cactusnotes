@@ -27,11 +27,13 @@ var StableProximitySq : float
 
 signal node_activated()
 signal node_deactivated()
+signal new_note(attachedTo, directionVector)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	HaltProximitySq  = pow(HaltProximity, 2)
 	StableProximitySq = pow(StableProximity, 2)
+	connect("new_note", global.getRootSceneManager().getCurrentScene(), "_on_CameraFocus_new_note_requested")
 	
 func setState(state):
 	CurrentState = state
@@ -135,9 +137,16 @@ func _input(event):
 	elif event is InputEventKey and Input.is_action_just_pressed("node_right"):
 		directionVector = Vector2(1, 0)
 		moveToNearestNode(directionVector)
-		
-	
-	
+			
+	if event is InputEventKey and Input.is_action_just_pressed("new_note_up"):
+		emit_signal("new_note", ActiveNode, Vector2(0, -1))
+	if event is InputEventKey and Input.is_action_just_pressed("new_note_right"):
+		emit_signal("new_note", ActiveNode, Vector2(1, 0))
+	if event is InputEventKey and Input.is_action_just_pressed("new_note_down"):
+		emit_signal("new_note", ActiveNode, Vector2(0, 1))
+	if event is InputEventKey and Input.is_action_just_pressed("new_note_left"):
+		emit_signal("new_note", ActiveNode, Vector2(-1, 0))
+
 
 func _process(delta):
 #	if get_viewport().get_mouse_position().y > 500:

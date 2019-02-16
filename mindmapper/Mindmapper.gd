@@ -80,7 +80,7 @@ func getAnchorNode():
 	return AnchorNode
 
 func spawnFirstNote():
-	var firstNode = spawnGraphNode(AnchorNode)
+	var firstNode = spawnGraphNode(AnchorNode, null)
 	firstNode.get_node("StickyNote").setText("Type your first [b]big idea[/b] here. Then click the flower.")
 	
 func getGraphNodeID(node):
@@ -118,7 +118,12 @@ func getGraphNodeByID(id):
 	#print("self.name, getGraphNodeByID: returning ", result)
 	return result
 
-func spawnGraphNode(attachedTo):
+func spawnGraphNode(attachedTo, directionVector):
+	var vectorAwayFromAnchor = attachedTo.get_global_position() - AnchorNode.get_global_position()
+
+	if directionVector == null:
+		directionVector = vectorAwayFromAnchor
+		
 	#var newGraphNode = RigidBody2D.new()
 	
 	var newGraphNode = NewGraphNodeScene.instance()
@@ -130,11 +135,15 @@ func spawnGraphNode(attachedTo):
 	newCircleShape.set_radius(75)
 	var newCollisionShape = CollisionShape2D.new()
 	newCollisionShape.set_shape(newCircleShape)
-	var randOffset = Vector2(randf()*300 - 150, randf()*100-300)
+	
+	var minOffset = 300.0
+	var randOffset = Vector2(randf()*200-100, randf()*200-100)
+	var normalVector = directionVector.normalized()
+	directionVector = (normalVector * minOffset) + (randOffset)
 	
 	var newPos = Vector2(0,0)
 	if attachedTo != null:
-		newPos = to_local(attachedTo.get_global_position() + randOffset)
+		newPos = to_local(attachedTo.get_global_position() + directionVector)
 	
 	newGraphNode.set_global_position(newPos)
 	
@@ -217,11 +226,14 @@ func _draw():
 			draw_line(nodeAPos, nodeBPos, Color.burlywood, 3.0, true)
 
 
-func _on_flower_new_note_requested(requestingNode): # coming from the UI on one of the existing notes
-	spawnGraphNode(requestingNode)
+func _on_flower_new_note_requested(requestingNode, directionVector): # coming from the UI on one of the existing notes
+	spawnGraphNode(requestingNode, directionVector)
+
+func _on_CameraFocus_new_note_requested(requestingNode, directionVector):
+	spawnGraphNode(requestingNode, directionVector)
 
 func _on_FileIO_new_note_requested(): # When loading notes from file, we don't know the edges yet.
-	spawnGraphNode(null)
+	spawnGraphNode(null, null)
 	
 func _on_FileIO_new_spring_requested(node_a_id, node_b_id):
 	var node_a

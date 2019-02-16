@@ -27,7 +27,7 @@ var SaveLoadID
 var LastKnownPosition : Vector2
 var MinDistanceMoved: float = 100
 
-signal new_note_requested(requestingNode)
+signal new_note_requested(requestingNode, directionOverride)
 signal picked_up_cactus(activeNode)
 signal released_cactus()
 
@@ -170,10 +170,25 @@ func _on_TextEdit_gui_input(event):
 		
 
 func _on_NewNoteButton_pressed():
-	emit_signal("new_note_requested", PhysicsParent)
+	emit_signal("new_note_requested", PhysicsParent, null)
 
 func _on_CameraFocus_node_activated():
 	enterTextEditMode()
 	
 func _on_CameraFocus_node_deactivated():
 	exitTextEditMode()
+	
+func _on_new_note_left_pressed():
+	emit_signal("new_note_requested", PhysicsParent, Vector2(-1, 0))
+
+func _on_new_note_right_pressed():
+	emit_signal("new_note_requested", PhysicsParent, Vector2(1, 0))
+
+func _on_new_note_up_pressed():
+	emit_signal("new_note_requested", PhysicsParent, Vector2(0, -1))
+
+func _on_new_note_down_pressed():
+	emit_signal("new_note_requested", PhysicsParent, Vector2(0, 1))
+	
+
+

@@ -38,11 +38,10 @@ Bugs:
 	
 
 Game Feel / UX Improvements:
-	- set the raptors to random start anim frame.
-	- give the raptors a minimum distance so they don't jitter
+	- ctrl-n doesn't work on browser. change it to ctrl-space or ctrl-enter
+	- add ctrl-left, ctrl-right, ctrl-up, ctrl-down to create new nodes in those directions
 	
 	
-	- add some harm for cactuses when the raptors touch them. Maybe disconnect their edges?
 	- add a mechanism for players to connect new edges
 	
 	- notes should radiate away from the anchor-node.
@@ -51,7 +50,6 @@ Game Feel / UX Improvements:
 	- notes should try and occupy empty space. Maybe add a slight repulsion force to them.
 	
 Refactoring / Architecture Improvements:
-	- Figure out the collision bits and masks. Cactuses (RigidBody2d) have their set in code.
 
 """
 

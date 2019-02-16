@@ -86,7 +86,8 @@ func _on_LoadButton_pressed():
 
 func _on_HelpButton_pressed():
 	var DialogTextArr = [
-		"Click and drag to move a note. Use the magnifying glass with the mouse or arrow keys to select a new note. \n\nClick the flower or press ctrl-n to spawn a new note.\n\nIf the magnifying glass is locked onto a note, you can click on any empty space to free it."
+		"Click and drag to move a note. Use the mouse to direct the magnifying glass. \n\nClick a flower to spawn a new note.\n\nIf the magnifying glass is locked onto a note, you can click on any empty space to free it.",
+		"You may also navigate and create notes with the keyboard. shift + arrow keys to move around. ctrl + arrow keys to create new notes."
 	]
 	spawnDialogBox(DialogTextArr)
 

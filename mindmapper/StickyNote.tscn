@@ -1,10 +1,18 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://StickyNote.gd" type="Script" id=1]
 [ext_resource path="res://scenery/flowerBud.png" type="Texture" id=2]
 [ext_resource path="res://scenery/flower.png" type="Texture" id=3]
 [ext_resource path="res://fonts/stickyNoteTheme.tres" type="Theme" id=4]
 [ext_resource path="res://fonts/handwriting/Permanent_Marker/PermanentMarker-Regular.ttf" type="DynamicFontData" id=5]
+
+[sub_resource type="InputEventAction" id=3]
+
+action = "new_node"
+
+[sub_resource type="ShortCut" id=4]
+
+shortcut = SubResource( 3 )
 
 [sub_resource type="StyleBoxFlat" id=1]
 
@@ -28,6 +36,56 @@ margin_top = -171.616
 margin_right = 78.6068
 margin_bottom = -44.6156
 shortcut_in_tooltip = false
+action_mode = 0
+shortcut = SubResource( 4 )
+texture_normal = ExtResource( 2 )
+texture_hover = ExtResource( 3 )
+expand = true
+
+[node name="new_note_right" type="TextureButton" parent="."]
+margin_left = 90.686
+margin_top = -14.4429
+margin_right = 123.686
+margin_bottom = 24.5571
+rect_rotation = 77.9
+shortcut_in_tooltip = false
+action_mode = 0
+texture_normal = ExtResource( 2 )
+texture_hover = ExtResource( 3 )
+expand = true
+
+[node name="new_note_left" type="TextureButton" parent="."]
+margin_left = -86.2435
+margin_top = 7.87143
+margin_right = -53.2435
+margin_bottom = 46.8714
+rect_rotation = -116.39
+shortcut_in_tooltip = false
+action_mode = 0
+texture_normal = ExtResource( 2 )
+texture_hover = ExtResource( 3 )
+expand = true
+
+[node name="new_note_down" type="TextureButton" parent="."]
+margin_left = -15.0384
+margin_top = 96.1931
+margin_right = 17.9616
+margin_bottom = 135.193
+rect_rotation = 192.71
+shortcut_in_tooltip = false
+action_mode = 0
+texture_normal = ExtResource( 2 )
+texture_hover = ExtResource( 3 )
+expand = true
+
+[node name="new_note_up" type="TextureButton" parent="."]
+margin_left = -66.1218
+margin_top = -70.9889
+margin_right = -33.1218
+margin_bottom = -31.9889
+rect_rotation = -47.29
+shortcut_in_tooltip = false
+action_mode = 0
 texture_normal = ExtResource( 2 )
 texture_hover = ExtResource( 3 )
 expand = true
@@ -67,6 +125,10 @@ bbcode_text = "test [b]test[/b]"
 text = "test test"
 
 [connection signal="pressed" from="NewNoteButton" to="." method="_on_NewNoteButton_pressed"]
+[connection signal="pressed" from="new_note_right" to="." method="_on_new_note_right_pressed"]
+[connection signal="pressed" from="new_note_left" to="." method="_on_new_note_left_pressed"]
+[connection signal="pressed" from="new_note_down" to="." method="_on_new_note_down_pressed"]
+[connection signal="pressed" from="new_note_up" to="." method="_on_new_note_up_pressed"]
 [connection signal="gui_input" from="TextEdit" to="." method="_on_TextEdit_gui_input"]
 [connection signal="mouse_entered" from="TextEdit" to="." method="_on_TextEdit_mouse_entered"]
 [connection signal="mouse_exited" from="TextEdit" to="." method="_on_TextEdit_mouse_exited"]
