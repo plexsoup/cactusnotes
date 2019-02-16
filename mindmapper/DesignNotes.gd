@@ -34,17 +34,17 @@ UI / UX:
 
 
 Bugs: 
-	- nodes are spawning in static mode instead of character mode.
+	- when you focus on a pinned note, it loses it's pin status.
+	
+	- When raptos eat links, the newly freed node can't connect to anything.
 	
 
 Game Feel / UX Improvements:
-	- ctrl-n doesn't work on browser. change it to ctrl-space or ctrl-enter
-	- add ctrl-left, ctrl-right, ctrl-up, ctrl-down to create new nodes in those directions
+	
+	- add a mechanism for players to connect new edges between nodes
+	- any node with more than two edges should be pinned automatically.
 	
 	
-	- add a mechanism for players to connect new edges
-	
-	- notes should radiate away from the anchor-node.
 	- add some extents to the map. Why can the magnifying glass fly infinietely away from the anchornode?
 	
 	- notes should try and occupy empty space. Maybe add a slight repulsion force to them.

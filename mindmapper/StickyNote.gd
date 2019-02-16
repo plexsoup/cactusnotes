@@ -64,10 +64,11 @@ func start(text : String, pos : Vector2, pinned : bool):
 func setState(state):
 	CurrentState = state
 	if state == STATES.pinned:
-		#PhysicsParent.set_mode(RigidBody.MODE_STATIC)
-		pass
-	else:
-		#PhysicsParent.set_mode(RigidBody.MODE_CHARACTER)
+		PhysicsParent.set_mode(RigidBody.MODE_STATIC)
+		#pass
+	elif state == STATES.idle:
+		PhysicsParent.set_mode(RigidBody.MODE_CHARACTER)
+	elif state == STATES.dragging:	
 		pass
 
 func setText(text):
@@ -124,6 +125,7 @@ func loadSavedData(data : Dictionary):
 
 
 func enterTextEditMode():
+	
 	ColorBG.hide()
 	TempPin = true
 	
@@ -133,11 +135,14 @@ func enterTextEditMode():
 	TextEditBox.select_all()
 
 func exitTextEditMode():
+	
 	TextEditBox.release_focus()
 	TempPin = false
 	ColorBG.show()
 	if CurrentState != STATES.pinned:
 		PhysicsParent.set_mode(RigidBody.MODE_CHARACTER)
+		# print(self.name, " setting PhysicsParent to MODE_CHARACTER")
+	PhysicsParent.set_sleeping(false)
 
 func _on_TextEdit_mouse_entered():
 	enterTextEditMode()
@@ -153,7 +158,7 @@ func _on_TextEdit_text_changed():
 func _on_TextEdit_gui_input(event):
 	if Input.is_action_just_pressed("drag_note"):
 		setState(STATES.dragging)
-		emit_signal("picked_up_cactus", PhysicsParent)
+		emit_signal("picked_up_cactus", PhysicsParent) # so the camera can follow us
 		LastKnownPosition = PhysicsParent.get_global_position()
 
 	if CurrentState == STATES.dragging and Input.is_action_just_released("drag_note"):
@@ -165,8 +170,9 @@ func _on_TextEdit_gui_input(event):
 	if event is InputEventMouseMotion and Input.is_action_pressed("drag_note") and CurrentState == STATES.dragging:
 		PhysicsParent.call_deferred("set_global_position", get_global_mouse_position())
 
-	if TextEditBox.has_focus() and Input.is_action_just_pressed("spawn_note"):
-		emit_signal("new_note_requested", PhysicsParent)
+#	if TextEditBox.has_focus() and Input.is_action_just_pressed("spawn_note"):
+#		emit_signal("new_note_requested", PhysicsParent)
+	# moved to CameraFocus
 		
 
 func _on_NewNoteButton_pressed():
@@ -190,5 +196,6 @@ func _on_new_note_up_pressed():
 func _on_new_note_down_pressed():
 	emit_signal("new_note_requested", PhysicsParent, Vector2(0, 1))
 	
-
+func _on_MindMapper_node_pin_requested():
+	setState(STATES.pinned)
 

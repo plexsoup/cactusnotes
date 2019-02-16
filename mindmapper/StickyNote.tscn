@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://StickyNote.gd" type="Script" id=1]
 [ext_resource path="res://scenery/flowerBud.png" type="Texture" id=2]
@@ -6,15 +6,7 @@
 [ext_resource path="res://fonts/stickyNoteTheme.tres" type="Theme" id=4]
 [ext_resource path="res://fonts/handwriting/Permanent_Marker/PermanentMarker-Regular.ttf" type="DynamicFontData" id=5]
 
-[sub_resource type="InputEventAction" id=3]
-
-action = "new_node"
-
-[sub_resource type="ShortCut" id=4]
-
-shortcut = SubResource( 3 )
-
-[sub_resource type="StyleBoxFlat" id=1]
+[sub_resource type="StyleBoxFlat" id=3]
 
 bg_color = Color( 0.619608, 0.611765, 0.356863, 1 )
 corner_radius_top_left = 8
@@ -23,7 +15,7 @@ corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 shadow_size = 5
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=4]
 
 font_data = ExtResource( 5 )
 
@@ -37,7 +29,6 @@ margin_right = 78.6068
 margin_bottom = -44.6156
 shortcut_in_tooltip = false
 action_mode = 0
-shortcut = SubResource( 4 )
 texture_normal = ExtResource( 2 )
 texture_hover = ExtResource( 3 )
 expand = true
@@ -79,10 +70,10 @@ texture_hover = ExtResource( 3 )
 expand = true
 
 [node name="new_note_up" type="TextureButton" parent="."]
-margin_left = -66.1218
-margin_top = -70.9889
-margin_right = -33.1218
-margin_bottom = -31.9889
+margin_left = -66.0
+margin_top = -71.0
+margin_right = -33.0
+margin_bottom = -32.0
 rect_rotation = -47.29
 shortcut_in_tooltip = false
 action_mode = 0
@@ -100,7 +91,7 @@ margin_top = -60.3234
 margin_right = 61.3913
 margin_bottom = 64.6766
 theme = ExtResource( 4 )
-custom_styles/normal = SubResource( 1 )
+custom_styles/normal = SubResource( 3 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "This is a test"
 wrap_enabled = true
@@ -118,7 +109,7 @@ color = Color( 0.803922, 0.776471, 0.337255, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = ExtResource( 4 )
-custom_fonts/bold_font = SubResource( 2 )
+custom_fonts/bold_font = SubResource( 4 )
 custom_colors/default_color = Color( 0, 0, 0, 1 )
 bbcode_enabled = true
 bbcode_text = "test [b]test[/b]"

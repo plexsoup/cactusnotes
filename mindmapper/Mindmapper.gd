@@ -14,6 +14,7 @@ You can ask them for the information when you need it, eg: for saving/loading.
 Refactor Notes:
 	If you find logic here, that isn't related to spawning, move it to another class
 
+	
 """
 
 
@@ -47,6 +48,7 @@ var Ticks : int = 0
 
 signal camera_drag_requested(mouseCoordinates)
 signal node_spawned(node)
+signal node_pin_requested()
 
 func _ready():
 
@@ -90,6 +92,8 @@ func getGraphNodeID(node):
 		#print(self.name, ": error calling getGraphNodeID. ", node, " doesn't have a StickyNote" )
 		pass
 
+
+
 func spawnGraphSpring(node_a, node_b):
 	# Create the Spring
 	var newSpring = GraphEdge.instance()
@@ -101,13 +105,31 @@ func spawnGraphSpring(node_a, node_b):
 #	print("node_a = ", newSpring.get_node_a(), " == ", newSpring.get_node(newSpring.get_node_a()) )
 #	print("node_b = ", newSpring.get_node_b(), " == ", newSpring.get_node(newSpring.get_node_b()))
 	
-	if node_a is RigidBody2D:
-		node_a.set_sleeping(false)
-	if node_b is RigidBody2D:
-		node_b.set_sleeping(false)
-	
+	pinIfManyEdges(node_a)
+	pinIfManyEdges(node_b)
 	return newSpring
+
+func pinIfManyEdges(node):
+	if node is RigidBody2D:
+		node.set_sleeping(false)
+		if countConnectionsToNode(node) > 2:
+			if node.has_node("StickyNote"):
+				var stickyNote = node.get_node("StickyNote")
+				if is_connected("node_pin_requested", stickyNote, "_on_node_pinned") == false:
+					connect("node_pin_requested", stickyNote, "_on_MindMapper_node_pin_requested")
+				emit_signal("node_pin_requested")
+				disconnect("node_pin_requested", stickyNote, "_on_MindMapper_node_pin_requested")
+
 	
+func countConnectionsToNode(node):
+	var numConnections = 0
+	
+	for edge in GraphEdges.get_children():
+		if edge.isConnectedTo(node):
+			numConnections += 1
+	
+	return numConnections
+
 func getGraphNodeByID(id):
 	#print(self.name, " calling getGraphNodeByID: ", id )
 	var result
@@ -136,7 +158,7 @@ func spawnGraphNode(attachedTo, directionVector):
 	var newCollisionShape = CollisionShape2D.new()
 	newCollisionShape.set_shape(newCircleShape)
 	
-	var minOffset = 300.0
+	var minOffset = 400.0
 	var randOffset = Vector2(randf()*200-100, randf()*200-100)
 	var normalVector = directionVector.normalized()
 	directionVector = (normalVector * minOffset) + (randOffset)
@@ -159,16 +181,19 @@ func spawnGraphNode(attachedTo, directionVector):
 #	var newID = newGraphNode.get_position_in_parent()
 	newStickyNote.setID(newID)
 	newGraphNode.set_name("CactusNode-" + str(newID))
-	print(self.name, " newGraphNode.name == ", newGraphNode.name)
+	#print(self.name, " newGraphNode.name == ", newGraphNode.name)
 	#print("New Graph Node: ID == ", newStickyNote.getID())
 
 
-	newGraphNode.set_sleeping(false)
+	
 
 	if attachedTo != null:
 		spawnGraphSpring(newGraphNode, attachedTo)
 	
 	emit_signal("node_spawned", newGraphNode)
+	
+	newGraphNode.call_deferred("set_sleeping", false)
+	newGraphNode.call_deferred("apply_central_impulse", Vector2(0.01,0))
 	return newGraphNode
 
 

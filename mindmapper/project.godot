@@ -22,7 +22,7 @@ _global_script_class_icons={
 
 config/name="Cactus Notes"
 run/main_scene="res://SceneManager.tscn"
-boot_splash/image="res://reference/cactus.png"
+boot_splash/image="res://reference/export/screenshots/mindmap1.png"
 config/icon="res://icons/cactusSign.png"
 
 [autoload]

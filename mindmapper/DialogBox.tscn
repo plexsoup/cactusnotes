@@ -37,6 +37,7 @@ font_data = ExtResource( 5 )
 size = 22
 outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
+use_mipmaps = true
 font_data = ExtResource( 6 )
 
 [sub_resource type="DynamicFont" id=6]
@@ -51,6 +52,7 @@ font_data = ExtResource( 5 )
 size = 22
 outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
+use_mipmaps = true
 font_data = ExtResource( 4 )
 
 [node name="DialogBox" type="Control"]

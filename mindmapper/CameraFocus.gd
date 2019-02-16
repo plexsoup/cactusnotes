@@ -80,7 +80,7 @@ func moveToNearestNode(directionVector):
 	rotateSearchArea(directionVector)
 	$SearchArea/Timer.start()
 	# the physics engine needs a moment to update the collision area.
-	# when the Timer ends, find nearest node will be called
+	# when the Timer ends, findNearestNode() will be called
 
 func findNearestNode():
 	# scan the field in the direction of Vector and get the closest cactus
@@ -98,14 +98,15 @@ func findNearestNode():
 				nearestDistSq = thisDistSq
 				bestCandidate = candidate
 		if bestCandidate != null and bestCandidate != ActiveNode:
-			#print("found a new candidate", bestCandidate.name)
 			setActiveNode(bestCandidate)
 			setState(STATES.tracking)
+			
 	
 
 func deactivateNode(node):
 	connect("node_deactivated", node.get_node("StickyNote"), "_on_CameraFocus_node_deactivated")
 	emit_signal("node_deactivated")
+	#print(self.name, " issued node_deactivated signal")
 	disconnect("node_deactivated", node.get_node("StickyNote"), "_on_CameraFocus_node_deactivated")
 	
 func setActiveNode(node):
@@ -139,13 +140,21 @@ func _input(event):
 		moveToNearestNode(directionVector)
 			
 	if event is InputEventKey and Input.is_action_just_pressed("new_note_up"):
+		# emit_signal("node_deactivated", ActiveNode) # not necessary. This happens after the next node is spawned.
 		emit_signal("new_note", ActiveNode, Vector2(0, -1))
+		
 	if event is InputEventKey and Input.is_action_just_pressed("new_note_right"):
+		#emit_signal("node_deactivated", ActiveNode)
 		emit_signal("new_note", ActiveNode, Vector2(1, 0))
 	if event is InputEventKey and Input.is_action_just_pressed("new_note_down"):
+		#emit_signal("node_deactivated", ActiveNode)
 		emit_signal("new_note", ActiveNode, Vector2(0, 1))
 	if event is InputEventKey and Input.is_action_just_pressed("new_note_left"):
+		#emit_signal("node_deactivated", ActiveNode)
 		emit_signal("new_note", ActiveNode, Vector2(-1, 0))
+
+	if event is InputEventKey and Input.is_action_just_pressed("spawn_note"):
+		emit_signal("new_note", ActiveNode, null)
 
 
 func _process(delta):

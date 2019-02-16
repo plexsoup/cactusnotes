@@ -34,10 +34,10 @@ func start(nodeA, nodeB):
 	Node_A_ID = getNodeID(nodeA)
 	Node_B_ID = getNodeID(nodeB)
 	
-	set_length(250)
+	set_length(300)
 	set_rest_length(150)
-	set_stiffness(200)
-	set_damping(1)
+	set_stiffness(10)
+	set_damping(0.1)
 
 func isConnectedTo(node):
 	if get_node(get_node_a()) == node or get_node(get_node_b()) == node:
