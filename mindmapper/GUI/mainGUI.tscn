@@ -96,6 +96,9 @@ margin_left = 64.0
 margin_top = 128.0
 margin_right = 900.0
 margin_bottom = 512.0
+access = 1
+current_dir = "user://"
+current_path = "user://"
 
 [node name="LoadDialog" type="FileDialog" parent="CanvasLayer"]
 margin_left = 64.0
@@ -104,6 +107,9 @@ margin_right = 900.0
 margin_bottom = 512.0
 window_title = "Open a File"
 mode = 0
+access = 1
+current_dir = "user://"
+current_path = "user://"
 
 [node name="HelpButton" type="TextureButton" parent="CanvasLayer"]
 editor/display_folded = true

@@ -1,0 +1,1 @@
+{"Notes":{"0":{"ID":1,"Text":"Type your first [b]big idea[/b] here. Then click the flower.","pinned":false,"pos":"Vector2( 409.319, 36.3783 )"},"1":{"ID":2,"Text":"Hi\n","pinned":false,"pos":"Vector2( 375.234, -219.579 )"}},"Springs":{"0":{"node_a_id":1,"node_b_id":null},"1":{"node_a_id":2,"node_b_id":1}}}
