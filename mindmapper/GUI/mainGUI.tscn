@@ -143,8 +143,10 @@ text = "Challenge"
 
 [node name="TimedChallengeTimer" type="Timer" parent="CanvasLayer/TimeChallengeButton"]
 wait_time = 90.0
+one_shot = true
 
 [node name="TimerCountdown" type="Label" parent="CanvasLayer/TimeChallengeButton/TimedChallengeTimer"]
+visible = false
 margin_left = 720.0
 margin_right = 842.0
 margin_bottom = 125.0
@@ -152,16 +154,19 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 11 )
 custom_fonts/font = ExtResource( 12 )
+custom_colors/font_color = Color( 1, 1, 1, 0.211765 )
 text = "..."
 script = ExtResource( 13 )
 
 [node name="Warning Label" type="Label" parent="CanvasLayer/TimeChallengeButton"]
+visible = false
 margin_left = -480.0
 margin_top = -509.782
 margin_right = 45.0
 margin_bottom = -384.782
 theme = ExtResource( 11 )
 custom_fonts/font = ExtResource( 12 )
+custom_colors/font_color = Color( 1, 1, 1, 0.211765 )
 text = "Time Attack!"
 
 [node name="DefenseChallengeButton" type="TextureButton" parent="CanvasLayer"]
