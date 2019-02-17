@@ -89,7 +89,7 @@ func spawnNotesFromArray(graphNotesArr : Array):
 			
 		# VVVVV Can I move this to a signal instead of a method call?
 		if MindMapper.has_method("spawnGraphNode"):
-			var newNode = MindMapper.spawnGraphNode(null)
+			var newNode = MindMapper.spawnGraphNode(null, null)
 			if newNode.has_node("StickyNote"):
 				#breakpoint
 				newNode.get_node("StickyNote").loadSavedData(note)

@@ -141,7 +141,11 @@ func getGraphNodeByID(id):
 	return result
 
 func spawnGraphNode(attachedTo, directionVector):
-	var vectorAwayFromAnchor = attachedTo.get_global_position() - AnchorNode.get_global_position()
+	var vectorAwayFromAnchor : Vector2
+	if attachedTo != null:
+		vectorAwayFromAnchor = attachedTo.get_global_position() - AnchorNode.get_global_position()
+	else:
+		vectorAwayFromAnchor = AnchorNode.get_global_position()
 
 	if directionVector == null:
 		directionVector = vectorAwayFromAnchor
@@ -177,8 +181,8 @@ func spawnGraphNode(attachedTo, directionVector):
 	var newStickyNote = stickyNote.instance()
 	
 	newGraphNode.add_child(newStickyNote)
-	var newID = GraphNodes.get_child_count()
-#	var newID = newGraphNode.get_position_in_parent()
+	#var newID = GraphNodes.get_child_count()-1
+	var newID = newGraphNode.get_position_in_parent()
 	newStickyNote.setID(newID)
 	newGraphNode.set_name("CactusNode-" + str(newID))
 	#print(self.name, " newGraphNode.name == ", newGraphNode.name)
@@ -264,11 +268,11 @@ func _on_FileIO_new_spring_requested(node_a_id, node_b_id):
 	var node_a
 	var node_b
 	
-	if node_a_id == null:
+	if node_a_id == null or node_a_id == -1 or node_a_id >= GraphNodes.get_child_count():
 		node_a = AnchorNode
 	else:
 		node_a = GraphNodes.get_child(node_a_id)
-	if node_b_id == null:
+	if node_b_id == null or node_b_id == -1 or node_b_id >= GraphNodes.get_child_count():
 		node_b = AnchorNode
 	else:
 		node_b = GraphNodes.get_child(node_b_id)

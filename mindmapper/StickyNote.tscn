@@ -6,7 +6,7 @@
 [ext_resource path="res://fonts/stickyNoteTheme.tres" type="Theme" id=4]
 [ext_resource path="res://fonts/handwriting/Permanent_Marker/PermanentMarker-Regular.ttf" type="DynamicFontData" id=5]
 
-[sub_resource type="StyleBoxFlat" id=3]
+[sub_resource type="StyleBoxFlat" id=1]
 
 bg_color = Color( 0.619608, 0.611765, 0.356863, 1 )
 corner_radius_top_left = 8
@@ -15,7 +15,7 @@ corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 shadow_size = 5
 
-[sub_resource type="DynamicFont" id=4]
+[sub_resource type="DynamicFont" id=2]
 
 font_data = ExtResource( 5 )
 
@@ -91,7 +91,7 @@ margin_top = -60.3234
 margin_right = 61.3913
 margin_bottom = 64.6766
 theme = ExtResource( 4 )
-custom_styles/normal = SubResource( 3 )
+custom_styles/normal = SubResource( 1 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "This is a test"
 wrap_enabled = true
@@ -109,7 +109,7 @@ color = Color( 0.803922, 0.776471, 0.337255, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = ExtResource( 4 )
-custom_fonts/bold_font = SubResource( 4 )
+custom_fonts/bold_font = SubResource( 2 )
 custom_colors/default_color = Color( 0, 0, 0, 1 )
 bbcode_enabled = true
 bbcode_text = "test [b]test[/b]"

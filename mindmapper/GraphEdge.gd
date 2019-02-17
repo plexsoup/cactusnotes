@@ -22,17 +22,20 @@ func _ready():
 	MindMapper = global.getRootSceneManager().getCurrentScene()
 
 func getNodeID(node):
+	if node == null:
+		return 0
 	if node.has_node("StickyNote"):
 		return node.get_node("StickyNote").getID()
 	else:
 		print(self.name, ": something's wrong in getNodeID. ", node, " doesn't have a StickyNote" )
 
 func start(nodeA, nodeB):
-	set_node_a(get_path_to(nodeA))
-	set_node_b(get_path_to(nodeB))
-	
-	Node_A_ID = getNodeID(nodeA)
-	Node_B_ID = getNodeID(nodeB)
+	if nodeA != null and is_instance_valid(nodeA):
+		set_node_a(get_path_to(nodeA))
+		Node_A_ID = getNodeID(nodeA)
+	if nodeB != null and is_instance_valid(nodeB):
+		set_node_b(get_path_to(nodeB))
+		Node_B_ID = getNodeID(nodeB)
 	
 	set_length(300)
 	set_rest_length(150)

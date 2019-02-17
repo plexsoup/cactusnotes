@@ -18,6 +18,7 @@ script = ExtResource( 2 )
 [node name="bgGUI" type="Node2D" parent="."]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="bgGUI"]
+editor/display_folded = true
 layer = -1
 
 [node name="TextureRect" type="TextureRect" parent="bgGUI/CanvasLayer"]

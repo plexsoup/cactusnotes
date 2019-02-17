@@ -135,8 +135,9 @@ func enterTextEditMode():
 	TextEditBox.select_all()
 
 func exitTextEditMode():
-	
-	TextEditBox.release_focus()
+	if is_instance_valid(TextEditBox):
+		if TextEditBox.has_focus():
+			TextEditBox.release_focus()
 	TempPin = false
 	ColorBG.show()
 	if CurrentState != STATES.pinned:
