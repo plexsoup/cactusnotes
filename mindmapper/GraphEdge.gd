@@ -9,6 +9,9 @@ It should store a reference to each RigidBodyNote it's connected to, including t
 
 extends DampedSpringJoint2D
 
+enum STATES { alive, dead }
+var CurrentState = STATES.alive
+
 onready var global = get_node("/root/global")
 var MindMapper
 
@@ -16,6 +19,9 @@ var Node_A_ID
 var Node_B_ID
 
 var Ticks = 0
+
+signal edge_connected()
+signal edge_disconnected()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -42,6 +48,39 @@ func start(nodeA, nodeB):
 	set_stiffness(10)
 	set_damping(0.1)
 
+	alertStickyNote(nodeA, "connected")
+	alertStickyNote(nodeB, "connected")
+
+func die():
+	if CurrentState == STATES.alive: # you can only die once
+		var nodeA = get_node(get_node_a())
+		var nodeB = get_node(get_node_b())
+		
+		alertStickyNote(nodeA, "disconnected")
+		set_node_a("")
+		alertStickyNote(nodeB, "disconnected")
+		set_node_b("")
+	
+		$"..".remove_child(self)
+		call_deferred("queue_free")
+	CurrentState = STATES.dead
+	
+
+func alertStickyNote(node, action):
+	if action == "connected":
+		if node != null and node.has_node("StickyNote"):
+			connect("edge_connected", node.get_node("StickyNote"), "_on_edge_connected")
+			emit_signal("edge_connected")
+			disconnect("edge_connected", node.get_node("StickyNote"), "_on_edge_connected")
+	elif action == "disconnected":
+		if node != null and node.has_node("StickyNote"):
+			print("disconnecting")
+			connect("edge_disconnected", node.get_node("StickyNote"), "_on_edge_disconnected")
+			emit_signal("edge_disconnected")
+			disconnect("edge_disconnected", node.get_node("StickyNote"), "_on_edge_disconnected")
+		
+		
+		
 func isConnectedTo(node):
 	if get_node(get_node_a()) == node or get_node(get_node_b()) == node:
 		return true
@@ -49,10 +88,20 @@ func isConnectedTo(node):
 		return false
 
 func removeNodeConnection(node):
+	if node.has_node("StickyNote"):
+		connect("edge_disconnected", node.get_node("StickyNote"), "_on_edge_disconnected")
+
 	if get_node(get_node_a()) == node:
 		set_node_a("")
+		if node.has_node("StickyNote"):
+			emit_signal("edge_disconnected")
 	if get_node(get_node_b()) == node:
 		set_node_b("")
+		if node.has_node("StickyNote"):
+			emit_signal("edge_disconnected")
+	if node.has_node("StickyNote"):
+		disconnect("edge_disconnected", node.get_node("StickyNote"), "_on_edge_disconnected")
+
 	
 func getSaveData():
 	return { "node_a_id": Node_A_ID, "node_b_id": Node_B_ID }

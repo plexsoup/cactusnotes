@@ -45,7 +45,7 @@ func saveFile(path):
 	var jsonString = to_json(comprehensiveDict)
 	f.store_string(jsonString)
 
-	print(jsonString)
+	#print(jsonString)
 
 	f.close()
 	
@@ -78,10 +78,8 @@ func loadFile(path):
 	spawnSpringsFromDict(SpringsDict)
 
 func spawnNotesFromArray(graphNotesArr : Array):
-	print("graphNotesArr == ", graphNotesArr)
+	#print("graphNotesArr == ", graphNotesArr)
 
-
-		
 	#spawn all the StickyNotes
 	for note in graphNotesArr:
 		if note == null:

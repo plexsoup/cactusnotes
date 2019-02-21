@@ -316,9 +316,9 @@ func _on_mainGUI_mouse_entered_button_area():
 	
 	
 func _on_mainGUI_mouse_exited_button_area():
-	print(self.name, " received signal: _on_mainGUI_mouse_exited_button_area()" )
+	#print(self.name, " received signal: _on_mainGUI_mouse_exited_button_area()" )
 	if PreviousStates.size() > 0:
-		print(self.name, " PreviousStates == ", PreviousStates )
+		#print(self.name, " PreviousStates == ", PreviousStates )
 		setState(PreviousStates.pop_back())
 	else:
 		setState(STATES.passive)

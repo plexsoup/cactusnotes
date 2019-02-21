@@ -1,8 +1,8 @@
 [gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://GUI/magnifyingGlass.png" type="Texture" id=1]
-[ext_resource path="res://GUI/hand.png" type="Texture" id=2]
-[ext_resource path="res://GUI/handSwipe.png" type="Texture" id=3]
+[ext_resource path="res://GUI/handSwipe.png" type="Texture" id=2]
+[ext_resource path="res://GUI/hand.png" type="Texture" id=3]
 [ext_resource path="res://CameraFocus.gd" type="Script" id=4]
 [ext_resource path="res://GUI/Camera2D.tscn" type="PackedScene" id=5]
 [ext_resource path="res://GUI/DirectionArrow.png" type="Texture" id=6]
@@ -23,13 +23,13 @@ animations = [ {
 }, {
 "frames": [ ExtResource( 2 ) ],
 "loop": true,
-"name": "hand",
-"speed": 5.0
+"name": "swipe",
+"speed": 1.0
 }, {
 "frames": [ ExtResource( 3 ) ],
 "loop": true,
-"name": "swipe",
-"speed": 1.0
+"name": "hand",
+"speed": 5.0
 } ]
 
 [sub_resource type="CircleShape2D" id=2]

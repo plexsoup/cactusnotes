@@ -34,12 +34,19 @@ UI / UX:
 
 
 Bugs: 
-	- When raptors eat links, the newly freed node can't connect to anything, because they're not in the tree.
-		- if a node gets ActiveFocus and it's not in the tree, add it back to the tree
-		
+	- when zoomed out, the minimum mouse distance is too large.. glass lags behind mouse
+
+	- Can't always click on the canvas to get out of focused mode
+	
+	
+	- When raptors eat links, the newly freed node can't connect to anything.
+	
 	
 
 Game Feel / UX Improvements:
+	- it's annoying to keep scrolling when you're going for edges.. 
+		- set an autopause/freeze zone on all borders
+	
 	- when you launch a challenge, the sidebar should auto-close
 	
 	- consider a radial menu for tool selection
@@ -52,7 +59,8 @@ Game Feel / UX Improvements:
 	- notes should try and occupy empty space. Maybe add a slight repulsion force to them.
 	
 Refactoring / Architecture Improvements:
-
+	- Move the links to the RigidBody instead of the stickynote
+	
 """
 
 

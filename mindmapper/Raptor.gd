@@ -16,7 +16,7 @@ var CurrentState = STATES.normal
 onready var global = get_node("/root/global")
 var CurrentScene
 var Velocity
-var Speed = 150
+var Speed = 350
 var Target
 var Health = 10
 var DPSIntake = 3

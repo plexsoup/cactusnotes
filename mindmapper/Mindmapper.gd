@@ -58,29 +58,32 @@ func _ready():
 	
 	connect("node_spawned", CameraFocus, "_on_node_spawned")
 
-	spawnAnchor()
+#	spawnAnchor()
 
 	spawnFirstNote()
 
 	# loadInstructions()
 
 
-func spawnAnchor():
-	# Temporary while we work out the kinks	
-	var anchorNode = StaticBody2D.new()
-	#anchorNode.set_mode(RigidBody2D.MODE_STATIC)
-	anchorNode.name = "Anchor"
-	var collisionShape = CollisionShape2D.new()
-	var circleShape = CircleShape2D.new()
-	circleShape.set_radius(20)
-	collisionShape.set_shape(circleShape)
-	add_child(anchorNode)
-	anchorNode.set_position(Vector2(0, 0))
-	AnchorNode = anchorNode
-	return anchorNode
+#func spawnAnchor():
+#	# Temporary while we work out the kinks	
+#	var anchorNode = StaticBody2D.new()
+#	#anchorNode.set_mode(RigidBody2D.MODE_STATIC)
+#	anchorNode.name = "Anchor"
+#	var collisionShape = CollisionShape2D.new()
+#	var circleShape = CircleShape2D.new()
+#	circleShape.set_radius(20)
+#	collisionShape.set_shape(circleShape)
+#	add_child(anchorNode)
+#	anchorNode.set_position(Vector2(0, 0))
+#	AnchorNode = anchorNode
+#	return anchorNode
+
+func setAnchor():
+	AnchorNode = GraphNodes.get_child(0)
 
 func getAnchorNode():
-	return AnchorNode
+	return GraphNodes.get_child(0)
 
 func getMainGUI():
 	return $mainGUI
@@ -89,9 +92,9 @@ func getCameraFocus():
 	return CameraFocus
 
 func spawnFirstNote():
-	var firstNode = spawnGraphNode(AnchorNode, null)
+	var firstNode = spawnGraphNode(null, null)
 	firstNode.get_node("StickyNote").setText("Type your first [b]big idea[/b] here. Then click the [i]flower[/i].")
-	firstNode.get_node("StickyNote").setPin(true)
+	firstNode.get_node("StickyNote").setPin("user", true)
 	
 func getGraphNodeID(node):
 	if node.has_node("StickyNote"):
@@ -113,14 +116,16 @@ func spawnGraphSpring(node_a, node_b):
 #	print("node_a = ", newSpring.get_node_a(), " == ", newSpring.get_node(newSpring.get_node_a()) )
 #	print("node_b = ", newSpring.get_node_b(), " == ", newSpring.get_node(newSpring.get_node_b()))
 	
-	pinIfManyEdges(node_a)
+	pinIfManyEdges(node_a) # Consider moving this to StickyNote
 	pinIfManyEdges(node_b)
+	
 	return newSpring
 
 func pinIfManyEdges(node):
 	if node is RigidBody2D:
 		node.set_sleeping(false)
-		if countConnectionsToNode(node) > 2:
+		var nodeConnections = countConnectionsToNode(node)
+		if nodeConnections > 2:
 			if node.has_node("StickyNote"):
 				var stickyNote = node.get_node("StickyNote")
 				if is_connected("node_pin_requested", stickyNote, "_on_node_pinned") == false:
@@ -150,10 +155,11 @@ func getGraphNodeByID(id):
 
 func spawnGraphNode(attachedTo, directionVector):
 	var vectorAwayFromAnchor : Vector2
+	var anchorPos = Vector2(0,0)
 	if attachedTo != null:
-		vectorAwayFromAnchor = attachedTo.get_global_position() - AnchorNode.get_global_position()
+		vectorAwayFromAnchor = attachedTo.get_global_position() - anchorPos
 	else:
-		vectorAwayFromAnchor = AnchorNode.get_global_position()
+		vectorAwayFromAnchor = Vector2(0, 1)
 
 	if directionVector == null:
 		directionVector = vectorAwayFromAnchor
@@ -302,10 +308,9 @@ func _on_cactus_died(cactusNode):
 	for edge in GraphEdges.get_children():
 		# ask the edge if it's connected to node
 		if edge.isConnectedTo(cactusNode):
-			edge.removeNodeConnection(cactusNode)
-			GraphEdges.remove_child(edge)
-			edge.queue_free()
-			
+			edge.die()
+		
+		
 		#GraphNodes.remove_child(cactusNode)
 		#cactusNode.call_deferred("queue_free")
 		# Something's not right when we free the cactus.
