@@ -5,7 +5,7 @@
 
 [sub_resource type="CircleShape2D" id=1]
 
-radius = 75.0
+radius = 97.0185
 
 [node name="Cactus" type="RigidBody2D"]
 collision_layer = 3

@@ -16,7 +16,7 @@ var CurrentState = STATES.normal
 onready var global = get_node("/root/global")
 var CurrentScene
 var Velocity
-var Speed = 200
+var Speed = 150
 var Target
 var Health = 10
 var DPSIntake = 3
@@ -32,6 +32,7 @@ func _ready():
 	add_to_group("enemies")
 	CurrentScene = global.getRootSceneManager().getCurrentScene()
 
+	Speed *= (randf() + 0.5)
 	getNewTarget()
 	
 	$AnimatedSprite.set_frame(randi()%3)
@@ -64,7 +65,7 @@ func move(myPos, targetPos, delta):
 	else:
 		$AnimatedSprite.set_flip_h(false)
 	
-	set_global_position(myPos + vectorToTarget)
+	set_global_position(myPos + Velocity)
 
 func targetExists(target):
 	if is_instance_valid(target):

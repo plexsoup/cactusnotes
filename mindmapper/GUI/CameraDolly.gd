@@ -1,3 +1,9 @@
+"""
+Responsible for moving the camera during 'drag canvas' actions.
+
+"""
+
+
 extends Position2D
 
 # when the mouse is up, do nothing

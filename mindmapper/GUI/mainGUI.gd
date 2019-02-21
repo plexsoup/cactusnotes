@@ -15,13 +15,24 @@ onready var CameraFocus = get_node("../CameraFocus")
 
 onready var SaveDialog = get_node("CanvasLayer/SaveDialog")
 onready var LoadDialog = get_node("CanvasLayer/LoadDialog")
-
+onready var EscDialog = get_node("CanvasLayer/EscDialog")
+onready var ChallengeDialog = get_node("CanvasLayer/Challenge")
 onready var FileIO = get_node("FileIO")
+
+var ScreenSize
 
 signal dialog_box_popup()
 signal dialog_box_closed()
 signal mouse_entered_button_area()
 signal mouse_exited_button_area()
+signal challenge_ended()
+
+var MouseProtectedAreaActivated : bool
+
+enum STATES {
+	normal, time_challenge, defense_challenge
+}
+var CurrentState = STATES.normal
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -30,16 +41,54 @@ func _ready():
 	connect("mouse_entered_button_area", CameraFocus, "_on_mainGUI_mouse_entered_button_area")
 	connect("mouse_exited_button_area", CameraFocus, "_on_mainGUI_mouse_exited_button_area")
 
+	connect("challenge_ended", ChallengeDialog, "_on_challenge_ended")
+
+	hideDialogs()
+
+	ScreenSize = get_viewport_rect().size
+	print(self.name, ": ScreenSize == ", ScreenSize)
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#
-#	Ticks += 1
-#	if Ticks % 200 == 0:
-#		print("mouse location is " , get_local_mouse_position())
-#		print("viewport mouse position is ", get_viewport().get_mouse_position())
-#		pass			
+
+func _process(delta):
+	Ticks += 1
+	
+	# Count remaining Raptors
+	if Ticks%20 == 0:
+		if CurrentState == STATES.defense_challenge and getNumRaptors() == 0:
+			endDefenseChallenge()
+
+	testMouseProtectedZones()
+
+func testMouseProtectedZones():
+
 		
-		
+	var mousePos = get_viewport().get_mouse_position()
+
+#	if Ticks % 10 == 0:
+#		print(self.name, " mousePos == ", mousePos)
+	var LeftMargin = $CanvasLayer/LeftMargin
+	var marginWidth = 64
+	if LeftMargin.getState() == LeftMargin.STATES.open:
+		if mousePos.x < marginWidth and MouseProtectedAreaActivated == false:
+			MouseProtectedAreaActivated = true
+			print(self.name, "entered")
+			emit_signal("mouse_entered_button_area")
+		elif mousePos.x > marginWidth and MouseProtectedAreaActivated == true:
+			MouseProtectedAreaActivated = false
+			print(self.name, "exited")
+			emit_signal("mouse_exited_button_area")
+	elif LeftMargin.getState() == LeftMargin.STATES.closed:
+		if MouseProtectedAreaActivated == true:
+			MouseProtectedAreaActivated = false
+			print(self.name, "exited")
+			emit_signal("mouse_exited_button_area")
+			
+			
+func hideDialogs():
+	$CanvasLayer/EscDialog.hide()
+	
+	ChallengeDialog.hide()
+	
 
 func spawnDialogBox(textArray):
 	var DialogBoxContainer = get_node("DialogBoxes")
@@ -73,14 +122,6 @@ func _on_LoadButton_pressed():
 		CurrentCamera.disableZoom()
 	# disable the avatar so we're not accidentally scrolling across the map
 	
-	
-
-#func _on_FileDialog_popup_hide():
-#	emit_signal("dialog_box_closed")
-#	if CurrentCamera.has_method("enableZoom"):
-#		CurrentCamera.enableZoom()
-
-
 
 
 
@@ -94,6 +135,14 @@ func _on_HelpButton_pressed():
 func _on_DialogBox_completed():
 	emit_signal("dialog_box_closed")
 
+func _input(event):
+	if Input.is_action_just_pressed("show_escape_dialog"):
+		if EscDialog.is_visible() == false:
+			EscDialog.show()
+			emit_signal("dialog_box_popup")
+		else:
+			EscDialog.hide()
+			emit_signal("dialog_box_closed")
 	
 
 func _on_Background_gui_input(event):
@@ -106,7 +155,7 @@ func _on_Background_gui_input(event):
 		emit_signal("window_dragged", get_global_mouse_position())
 
 
-func _on_AboutCactusNotesButton_button_down():
+func _on_AboutCactusNotesButton_button_pressed():
 	var DialogTextArr = [
 		"Cactus Notes is a mindmapping / brainstorming application developed for the Sixth Godot Wild Game Jam. It was intended as a replacement for paper and whiteboards, for use in the Game Design planning process...",
 		"... at least, that was the intention. It turns out it's also a great for building conspiracy walls. Red yarn will come in a future DLC.",
@@ -116,9 +165,6 @@ func _on_AboutCactusNotesButton_button_down():
 	spawnDialogBox(DialogTextArr)
 
 
-
-
-	
 
 
 func _on_SaveDialog_popup_hide():
@@ -136,20 +182,6 @@ func _on_LoadDialog_popup_hide():
 		CurrentCamera.enableZoom()
 
 
-#func _on_MouseSafeZone_mouse_entered():
-#	#tell the CameraFocus to stop moving
-#	print("entering mouse safe zone")
-#	emit_signal("mouse_entered_button_area")
-#
-#
-#func _on_MouseSafeZone_mouse_exited():
-#	print("leaving mouse safe zone")
-#	emit_signal("mouse_exited_button_area")
-
-
-
-
-
 func _on_TimedChallengeTimer_timeout():
 	var textArr = [
 		"Thus ends the timed challenge.",
@@ -161,15 +193,18 @@ func _on_TimedChallengeTimer_timeout():
 	$"CanvasLayer/TimeChallengeButton/Warning Label".hide()
 
 func _on_TimeChallengeButton_pressed():
-	$"CanvasLayer/TimeChallengeButton/Warning Label".show()
-	var time = $CanvasLayer/TimeChallengeButton/TimedChallengeTimer.get_wait_time()
-	var textArr = [
-		"It's said that time pressure can stimulate creativity. \n\nCome up with a project or concept you need to brainstorm. \n\nYou have " + str(time) + " seconds to generate as many ideas as possible."
-	]
+	# print(self.name, " opening time challenge dialog")
+#	var time = $CanvasLayer/TimeChallengeButton/TimedChallengeTimer.get_wait_time()
 	
-	spawnDialogBox(textArr)
-	$CanvasLayer/TimeChallengeButton/TimedChallengeTimer.start()
-	$CanvasLayer/TimeChallengeButton/TimedChallengeTimer/TimerCountdown.show()
+	var duration = 60
+	var instructions = "It's said that time pressure can stimulate creativity. \nCome up with a project or concept you need to brainstorm. \nYou have " + str(duration) + " seconds to generate as many ideas as possible."
+	var challengeType = "time"
+	var completionTextArr = ["Thus ends the timed challenge. Hopefully it was productive."]
+	ChallengeDialog.start(challengeType, instructions, duration, completionTextArr)
+	
+	emit_signal("dialog_box_popup")
+	
+
 
 func spawnRaptor():
 	var minDistance = 500
@@ -182,19 +217,107 @@ func spawnRaptor():
 	newRaptor.set_position(to_local(CameraFocus.get_global_position() + Vector2(randDistance, 0).rotated(randf()*2*PI)))
 	$Raptors.add_child(newRaptor)
 
-func _on_DefenseChallengeButton_pressed():
-	var button = $CanvasLayer/DefenseChallengeButton
-	var startTimer = button.get_node("DefenseChallengeStartTimer")
-	startTimer.start()
-	button.get_node("WarningLabel").show()
-	var textArr = [
-		"To identify which of your ideas are most important... \n\nsuddenly Dinosaurs! \n\nDefend your thoughts!"
-	]
-	spawnDialogBox(textArr)
+func getNumRaptors():
+	return $Raptors.get_child_count()
 
-func _on_DefenseChallengeStartTimer_timeout():
-	$CanvasLayer/DefenseChallengeButton/WarningLabel.hide()
-	var numRaptors = 150
-	for i in range(numRaptors):
-		spawnRaptor()
+
+func _on_DefenseChallengeButton_pressed():
+	var instructions = "Forced to actively defend your ideas from external threat, you might learn which are most important to you... Bring on the raptors!"
+	var challengeType = "raptor"
+	var duration : float = 60
+	var completionTextArr = ["Thus ends the raptor challenge. Hopefully some of your work survived."]
+	ChallengeDialog.start(challengeType, instructions, duration, completionTextArr)
+	emit_signal("dialog_box_popup")
+
+func setState(state):
+	CurrentState = state
 	
+func getState():
+	return CurrentState
+	
+func endDefenseChallenge():
+	var textArr = ["Thus ends the defense challenge. Hopefully your ideas survived."]
+	spawnDialogBox(textArr)
+	setState(STATES.normal)
+	emit_signal("challenge_ended")
+	
+func _on_DefenseChallengeDurationTimer_timeout():
+	endDefenseChallenge()
+
+
+
+
+
+
+
+
+
+func spawnRaptors():
+	var numRaptors = 60
+	for i in range(numRaptors):
+		
+		global.wait(0.075)
+		spawnRaptor()
+
+func cleanupRaptors():
+	for raptor in $Raptors.get_children():
+		raptor.queue_free()
+		
+
+#func _on_DefenseDialog_ReturnButton_pressed():
+#	DefenseDialog.hide()
+#	emit_signal("dialog_box_closed")
+
+
+func _on_QuitButton_pressed():
+	get_tree().quit()
+	
+func _on_ResumeButton_pressed():
+	$CanvasLayer/EscDialog.hide()
+
+func _on_OpenPanelButton_pressed():
+	$LeftMargin/LeftPanel.show()
+
+func _on_GUI_button_pressed(buttonName, args):
+	#print(self.name, " _on_GUI_button_pressed(", buttonName, " , ", args )
+	match buttonName:
+		"Save":
+			_on_SaveButton_pressed()
+		"Load":
+			_on_LoadButton_pressed()
+		"Help":
+			_on_HelpButton_pressed()
+		"RaptorChallenge":
+			_on_DefenseChallengeButton_pressed()
+		"TimeChallenge":
+			_on_TimeChallengeButton_pressed()
+		"About":
+			_on_AboutCactusNotesButton_button_pressed()
+
+func _on_AboutCactusNotesButton_pressed():
+	pass # Replace with function body.
+
+func _on_Challenge_started(challengeType):
+	# print(self.name, " _on_challenge_started(", challengeType , ")")
+	match challengeType:
+		"raptor":
+			setState(STATES.defense_challenge)
+			spawnRaptors()
+		"time":
+			setState(STATES.time_challenge)
+			pass
+
+func _on_Challenge_completed(challengeType):
+	match challengeType:
+		"raptor":
+			setState(STATES.normal)
+			cleanupRaptors()
+		"time":
+			setState(STATES.normal)
+			pass
+
+
+
+
+
+

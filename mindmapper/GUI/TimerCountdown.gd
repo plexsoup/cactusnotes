@@ -11,4 +11,4 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	set_text(str(int($"..".get_time_left())))
+	set_text(str(int($"../ChallengeTimer".get_time_left())))

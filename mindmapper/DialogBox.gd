@@ -35,11 +35,12 @@ signal completed
 func _ready():
 	pass
 
-func start(textArray, parentScene):
+func start(textArray : Array, parentScene):
+	DialogText = textArray
+		
 	#connect("initialized", global.getCurrentPlayer(), "_on_dialogBox_initialized")
 	connect("completed", parentScene, "_on_DialogBox_completed")
 
-	DialogText = textArray
 	DisplayedText = ""
 	if DialogText.size() > 0:
 		CurrentLineText = DialogText[0]
@@ -121,3 +122,10 @@ func _on_DialogTextBox_gui_input(event):
 		if event.button_index == BUTTON_LEFT:
 			revealAllLettersOrShowNextLine()
 			
+
+func _on_DialogTextBox_meta_clicked(meta):
+	#HMM. The gui_input click to skip through text seems to interfere with the meta-clicked
+	print(self.name, " clicked on URL", meta)
+	pass
+	#OS.shell_open(meta);
+	#OS.shell_execute("https://www.github.com/plexsoup");

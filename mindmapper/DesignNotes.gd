@@ -34,15 +34,17 @@ UI / UX:
 
 
 Bugs: 
-	- when you focus on a pinned note, it loses it's pin status.
-	
-	- When raptos eat links, the newly freed node can't connect to anything.
+	- When raptors eat links, the newly freed node can't connect to anything, because they're not in the tree.
+		- if a node gets ActiveFocus and it's not in the tree, add it back to the tree
+		
 	
 
 Game Feel / UX Improvements:
+	- when you launch a challenge, the sidebar should auto-close
+	
+	- consider a radial menu for tool selection
 	
 	- add a mechanism for players to connect new edges between nodes
-	- any node with more than two edges should be pinned automatically.
 	
 	
 	- add some extents to the map. Why can the magnifying glass fly infinietely away from the anchornode?

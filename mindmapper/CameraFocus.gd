@@ -15,15 +15,19 @@ var PreviousStates : Array = []
 
 
 var Velocity : Vector2
-var InitialSpeed: float = 400
+var InitialSpeed: float = 800 # was 400
 var Speed : float
+var RotationSpeed = 6.0
+
 onready var MyCamera = get_node("Camera2D")
 var ActiveNode
 
 var HaltProximity : float = 75 # don't move the avatar if you're this close to the mouse cursor
-var StableProximity : float = 125 # don't rotate the avatar if you're inside this radius
+var StableProximity : float = 80 # don't rotate the avatar if you're inside this radius
 var HaltProximitySq : float
 var StableProximitySq : float
+
+var Ticks = 0
 
 signal node_activated()
 signal node_deactivated()
@@ -42,7 +46,7 @@ func getState():
 	return CurrentState
 	
 func pretendToDragCactus():
-	set_animation("hand")
+	set_animation("none") # the sitckynote will activate a fake hand icon
 
 func pretendToInspect():
 	set_animation("glass")
@@ -60,18 +64,85 @@ func moveToDestination(delta, destination, speed):
 	var vectorToDestination = destination - myPos
 	var directionVector = vectorToDestination.normalized()
 
+	# need a factor which moves faster or slower based on distance to mouse
+	#var speedFactor = vectorToDestination.length()/300
+
+
+	#var speedFactor = myPos.distance_squared_to(destination)/25000
+	#var speedFactor = MyCamera.zoom.x * vectorToDestination.length()/1000
+	var speedFactor = 8.0
+
 	var distSqToDestination = myPos.distance_squared_to(destination)
 	if distSqToDestination > HaltProximitySq * MyCamera.zoom.x:
-		set_global_position(myPos + directionVector * speed * delta * global.GameSpeed)
+		set_global_position(lerp(myPos, destination, min(delta * speedFactor * global.GameSpeed, 0.8)))
+		#  * speed * speedFactor * delta * global.GameSpeed
+#	set_global_position(myPos + directionVector * speed * speedFactor * delta * global.GameSpeed)
+
+	
+#	if distSqToDestination > StableProximitySq:
+#		# having a zone of rotational stability allows the user to nudge the avatar backwards without rotating it
+#		# **** GAME FEEL: when the magnifying glass speed is set very high, the nudging mechanic doesn't feel good.
+#		# Let's try taking this out and see what happens
+#		look_at(destination)
+	look_at_slowly(destination, delta)
+	update()
+
+
+
+func look_at_slowly(destination, delta):
+	# figure out whether to turn left or right, then turn RotationSpeed * delta
+
+	var myPos = get_global_position()
+	var myRotation = get_rotation()
+	var myDirectionVector = Vector2(1, 0).rotated(myRotation)
+	var myPerpendicularVector = myDirectionVector.rotated(PI / 2.0)
+	
+	
+	var targetVector = (destination - myPos)
+	var distSqToDestination = myPos.distance_squared_to(destination)
+	var normalVector = targetVector.normalized()
+	
+	var angle = myDirectionVector.angle_to(targetVector)
+#	if Ticks % 60 == 0:
+#		print(self.name, " angle == ", angle )
+
+	var dotProduct = myPerpendicularVector.dot(targetVector )
+#	var factor = abs(dotProduct / 100)
+#	if Ticks % 60 == 0:
+#		print(self.name, " rotation factor == ", factor)
+	var factor = abs(angle )
+
+	var direction = sign(dotProduct)
 	
 	if distSqToDestination > StableProximitySq:
-		# having a zone of rotational stability allows the user to nudge the avatar backwards without rotating it
-		look_at(destination)
+		set_global_rotation(myRotation + RotationSpeed * delta * factor * direction)
+	
+	##############
+	# here's the angle_to method
+#	var angle = myPos.angle_to_point(destination)
+#	var direction = sign(angle)
+#	angle = abs(angle)
+#	rotate(min(angle, 1*delta)*direction)	
+#
+	
+	###############
+	# here's the atan method
+		# not so good.
+		# flips when the mouse cursor is on the left side of the screen
+#	if distanceToDestination > StableProximity:
+#		var vector_towards_target = destination - myPos
+#		var desiredAngle = (atan2(vector_towards_target.y, vector_towards_target.x))
+#
+#		set_rotation( lerp(get_rotation(), desiredAngle, delta * RotationSpeed) )
+	#############
+	
+	
 
 func moveToCactus(delta):
-	var speed = InitialSpeed * 2 * MyCamera.zoom.x
+	var speed = InitialSpeed * 8.0 * MyCamera.zoom.x
 	var destination = ActiveNode.get_global_position()
 	moveToDestination(delta, destination, speed)
+	#look_at_slowly(destination, delta)
 
 func rotateSearchArea(directionVector):
 	$SearchArea.look_at(get_global_position() + directionVector)
@@ -158,6 +229,8 @@ func _input(event):
 
 
 func _process(delta):
+	Ticks += 1
+	
 #	if get_viewport().get_mouse_position().y > 500:
 #		return # ignore mouse requests if you're near the button bar.
 		# ^^^ THIS IS A HACK. Needs a better, long-term solution
@@ -192,30 +265,41 @@ func _process(delta):
 	
 func _draw():
 	var zoom = MyCamera.zoom.x
-	draw_string(global.BaseFont, $FocalPoint.position + Vector2(-15, -65.0), "Zoom: " + str(zoom), Color(0.8, 1.0, 0.8, 0.5))
+	draw_string(global.BaseFont, $FocalPoint.position + Vector2(-15, -65.0), "Zoom: " + str("%5.2f" % (10/zoom)) +"x", Color(0.8, 1.0, 0.8, 0.5))
 
 	#draw_string(global.BaseFont, $FocalPoint.position + Vector2(-15, -45.0), "State: " + StateStrings[CurrentState], Color.antiquewhite )
 
+#	draw_circle(position, 500, Color(0.0, 0.0, 1.0, 1.0) )
+#	draw_circle(position, 1500, Color(1.0, 0.0, 0.0, 0.5))
+#	draw_circle(position, 2500, Color(0.0, 1.0, 0.0, 0.4))
+	
 
 func _on_picked_up_cactus(activeNode): # signal from StickyNote
 	setActiveNode(activeNode)
 	setState(STATES.dragging)
+
+func _on_selected_cactus(node):
+	setActiveNode(node)
+	setState(STATES.tracking)
 	
 func _on_released_cactus(): # signal from StickyNote
 	setState(STATES.tracking)
 
 func _on_camera_drag_requested():
-	var offsetVector = Vector2(-200, 0)
-	set_global_position(get_global_mouse_position() + offsetVector)
-	setState(STATES.swiping)
+#	var offsetVector = Vector2(-200, 0)
+#	set_global_position(get_global_mouse_position() + offsetVector)
+#	setState(STATES.swiping)
+	setState(STATES.passive) # <-- *** GAME FEEL: need a new state which speeds up the magnifying glass.
+	pass
 	
 func _on_node_spawned(node):
 	setActiveNode(node)
 	setState(STATES.tracking)
 
 func _on_dialog_box_popup():
-	setState(STATES.frozen)
 	PreviousStates.push_back(CurrentState)
+	setState(STATES.frozen)
+	
 
 func _on_dialog_box_closed():
 	if PreviousStates.size() > 0:
@@ -227,25 +311,20 @@ func _on_Timer_timeout():
 	findNearestNode()
 
 func _on_mainGUI_mouse_entered_button_area():
-	setState(STATES.frozen)
 	PreviousStates.push_back(CurrentState)
+	setState(STATES.frozen)
+	
 	
 func _on_mainGUI_mouse_exited_button_area():
+	print(self.name, " received signal: _on_mainGUI_mouse_exited_button_area()" )
 	if PreviousStates.size() > 0:
+		print(self.name, " PreviousStates == ", PreviousStates )
 		setState(PreviousStates.pop_back())
 	else:
-		setState(STATES.idle)
+		setState(STATES.passive)
 	
 
 
-
-
-#func _on_BurnArea_body_entered(body):
-#	if body.is_in_group("enemies"):
-#		if body.has_method("_on_burn"):
-#			var damage = 10
-#			body._on_burn(damage)
-			
 
 
 func _on_BurnArea_area_entered(area):
@@ -259,4 +338,11 @@ func _on_cactus_died(cactusNode):
 		if CurrentState != STATES.frozen:
 			setState(STATES.passive)
 		ActiveNode = null
+	
+
+func _on_BurnArea_body_entered(body):
+	# if its a cactus, make that cactus active
+	if CurrentState == STATES.passive:
+		if body.is_in_group("cacti"):
+			ActiveNode = body
 	

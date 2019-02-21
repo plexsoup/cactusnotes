@@ -11,7 +11,7 @@ signal cactus_died(cactus)
 func _ready():
 	MindMapper = global.getRootSceneManager().getCurrentScene()
 	connect("cactus_died", MindMapper, "_on_cactus_died")
-	
+	add_to_group("cacti")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

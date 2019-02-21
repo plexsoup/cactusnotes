@@ -61,7 +61,8 @@ func _ready():
 	spawnAnchor()
 
 	spawnFirstNote()
-	
+
+	# loadInstructions()
 
 
 func spawnAnchor():
@@ -81,9 +82,16 @@ func spawnAnchor():
 func getAnchorNode():
 	return AnchorNode
 
+func getMainGUI():
+	return $mainGUI
+
+func getCameraFocus():
+	return CameraFocus
+
 func spawnFirstNote():
 	var firstNode = spawnGraphNode(AnchorNode, null)
-	firstNode.get_node("StickyNote").setText("Type your first [b]big idea[/b] here. Then click the flower.")
+	firstNode.get_node("StickyNote").setText("Type your first [b]big idea[/b] here. Then click the [i]flower[/i].")
+	firstNode.get_node("StickyNote").setPin(true)
 	
 func getGraphNodeID(node):
 	if node.has_node("StickyNote"):
@@ -120,7 +128,7 @@ func pinIfManyEdges(node):
 				emit_signal("node_pin_requested")
 				disconnect("node_pin_requested", stickyNote, "_on_MindMapper_node_pin_requested")
 
-	
+
 func countConnectionsToNode(node):
 	var numConnections = 0
 	
@@ -305,3 +313,11 @@ func _on_cactus_died(cactusNode):
 
 func _on_cleanup_requested():
 	cleanup()
+
+func _on_ColorRect_gui_input(event):
+	if event is InputEventMouseButton and Input.is_action_just_pressed("drag_camera"):
+		#print("user would like to drag the camera view")
+		emit_signal("camera_drag_requested")
+
+
+	

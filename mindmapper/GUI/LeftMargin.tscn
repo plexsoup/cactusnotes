@@ -1,0 +1,203 @@
+[gd_scene load_steps=21 format=2]
+
+[ext_resource path="res://fonts/stickyNoteTheme.tres" type="Theme" id=1]
+[ext_resource path="res://GUI/LeftMargin.gd" type="Script" id=2]
+[ext_resource path="res://icons/cactusSign.png" type="Texture" id=3]
+[ext_resource path="res://icons/cactusSign-hover.png" type="Texture" id=4]
+[ext_resource path="res://GUI/Button.gd" type="Script" id=5]
+[ext_resource path="res://fonts/architect-s-daughter/ArchitectsDaughter.ttf" type="DynamicFontData" id=6]
+[ext_resource path="res://icons/info-sign.png" type="Texture" id=7]
+[ext_resource path="res://icons/info-sign-hover.png" type="Texture" id=8]
+[ext_resource path="res://icons/FileIO.png" type="Texture" id=9]
+[ext_resource path="res://icons/FileIO-hover.png" type="Texture" id=10]
+[ext_resource path="res://icons/open-book.png" type="Texture" id=11]
+[ext_resource path="res://icons/open-book-hover.png" type="Texture" id=12]
+[ext_resource path="res://icons/alarm-clock.png" type="Texture" id=13]
+[ext_resource path="res://icons/alarm-clock-hover.png" type="Texture" id=14]
+[ext_resource path="res://icons/ninja-velociraptor.png" type="Texture" id=15]
+[ext_resource path="res://icons/ninja-velociraptor-hover.png" type="Texture" id=16]
+[ext_resource path="res://fonts/Martel_Sans/MartelSans-Light.ttf" type="DynamicFontData" id=17]
+[ext_resource path="res://GUI/Tree.gd" type="Script" id=18]
+
+[sub_resource type="DynamicFont" id=1]
+
+size = 14
+outline_size = 2
+outline_color = Color( 0, 0, 0, 1 )
+use_mipmaps = true
+font_data = ExtResource( 6 )
+
+[sub_resource type="DynamicFont" id=2]
+
+size = 12
+font_data = ExtResource( 17 )
+
+[node name="LeftPanel" type="Panel"]
+anchor_bottom = 1.0
+margin_left = -78.0
+theme = ExtResource( 1 )
+script = ExtResource( 2 )
+
+[node name="OpenPanelButton" type="ToolButton" parent="."]
+margin_left = 78.9268
+margin_top = 264.081
+margin_right = 118.927
+margin_bottom = 328.081
+text = "|||"
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
+mouse_filter = 2
+
+[node name="VSplitContainer" type="VSplitContainer" parent="MarginContainer"]
+margin_right = 58.0
+margin_bottom = 580.0
+mouse_filter = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="MarginContainer/VSplitContainer"]
+margin_right = 58.0
+margin_bottom = 580.0
+mouse_filter = 2
+
+[node name="IconContainer" type="GridContainer" parent="MarginContainer/VSplitContainer/CenterContainer"]
+margin_left = 5.0
+margin_top = 66.0
+margin_right = 53.0
+margin_bottom = 514.0
+mouse_filter = 2
+custom_constants/vseparation = 32
+custom_constants/hseparation = 12
+
+[node name="About" type="TextureButton" parent="MarginContainer/VSplitContainer/CenterContainer/IconContainer"]
+margin_right = 48.0
+margin_bottom = 48.0
+rect_min_size = Vector2( 48, 48 )
+mouse_filter = 1
+texture_normal = ExtResource( 3 )
+texture_hover = ExtResource( 4 )
+expand = true
+stretch_mode = 4
+script = ExtResource( 5 )
+
+[node name="Label" type="Label" parent="MarginContainer/VSplitContainer/CenterContainer/IconContainer/About"]
+margin_left = 1.26709
+margin_top = 41.6752
+margin_right = 48.2671
+margin_bottom = 66.6752
+custom_fonts/font = SubResource( 1 )
+text = "About"
+
+[node name="Help" type="TextureButton" parent="MarginContainer/VSplitContainer/CenterContainer/IconContainer"]
+margin_top = 80.0
+margin_right = 48.0
+margin_bottom = 128.0
+rect_min_size = Vector2( 48, 48 )
+texture_normal = ExtResource( 7 )
+texture_hover = ExtResource( 8 )
+expand = true
+stretch_mode = 4
+script = ExtResource( 5 )
+
+[node name="Label2" type="Label" parent="MarginContainer/VSplitContainer/CenterContainer/IconContainer/Help"]
+margin_left = 6.85379
+margin_top = 42.3947
+margin_right = 53.8538
+margin_bottom = 67.3947
+custom_fonts/font = SubResource( 1 )
+text = "Help"
+
+[node name="Save" type="TextureButton" parent="MarginContainer/VSplitContainer/CenterContainer/IconContainer"]
+margin_top = 160.0
+margin_right = 48.0
+margin_bottom = 208.0
+rect_min_size = Vector2( 48, 48 )
+texture_normal = ExtResource( 9 )
+texture_hover = ExtResource( 10 )
+expand = true
+stretch_mode = 4
+script = ExtResource( 5 )
+
+[node name="Label3" type="Label" parent="MarginContainer/VSplitContainer/CenterContainer/IconContainer/Save"]
+margin_left = 4.49973
+margin_top = 40.141
+margin_right = 51.4997
+margin_bottom = 65.141
+custom_fonts/font = SubResource( 1 )
+text = "Save"
+
+[node name="Load" type="TextureButton" parent="MarginContainer/VSplitContainer/CenterContainer/IconContainer"]
+margin_top = 240.0
+margin_right = 48.0
+margin_bottom = 288.0
+rect_min_size = Vector2( 48, 48 )
+texture_normal = ExtResource( 11 )
+texture_hover = ExtResource( 12 )
+expand = true
+stretch_mode = 4
+script = ExtResource( 5 )
+
+[node name="Label4" type="Label" parent="MarginContainer/VSplitContainer/CenterContainer/IconContainer/Load"]
+margin_left = 3.93094
+margin_top = 38.0666
+margin_right = 50.9309
+margin_bottom = 63.0666
+custom_fonts/font = SubResource( 1 )
+text = "Load"
+
+[node name="TimeChallenge" type="TextureButton" parent="MarginContainer/VSplitContainer/CenterContainer/IconContainer"]
+margin_top = 320.0
+margin_right = 48.0
+margin_bottom = 368.0
+rect_min_size = Vector2( 48, 48 )
+texture_normal = ExtResource( 13 )
+texture_hover = ExtResource( 14 )
+expand = true
+stretch_mode = 4
+script = ExtResource( 5 )
+
+[node name="Label5" type="Label" parent="MarginContainer/VSplitContainer/CenterContainer/IconContainer/TimeChallenge"]
+margin_left = 0.518127
+margin_top = 36.561
+margin_right = 47.5181
+margin_bottom = 61.561
+custom_fonts/font = SubResource( 1 )
+text = "Timed"
+
+[node name="RaptorChallenge" type="TextureButton" parent="MarginContainer/VSplitContainer/CenterContainer/IconContainer"]
+margin_top = 400.0
+margin_right = 48.0
+margin_bottom = 448.0
+rect_min_size = Vector2( 48, 48 )
+texture_normal = ExtResource( 15 )
+texture_hover = ExtResource( 16 )
+expand = true
+stretch_mode = 4
+script = ExtResource( 5 )
+
+[node name="Label6" type="Label" parent="MarginContainer/VSplitContainer/CenterContainer/IconContainer/RaptorChallenge"]
+margin_left = -10.76
+margin_top = 37.4983
+margin_right = 57.24
+margin_bottom = 62.4983
+custom_fonts/font = SubResource( 1 )
+text = "Raptors"
+
+[node name="TreeContainer" type="MarginContainer" parent="MarginContainer/VSplitContainer"]
+visible = false
+margin_top = 360.0
+margin_right = 180.0
+margin_bottom = 580.0
+rect_min_size = Vector2( 100, 100 )
+
+[node name="Tree" type="Tree" parent="MarginContainer/VSplitContainer/TreeContainer"]
+margin_right = 180.0
+margin_bottom = 220.0
+custom_fonts/font = SubResource( 2 )
+script = ExtResource( 18 )
+
+[connection signal="pressed" from="OpenPanelButton" to="." method="_on_OpenPanelButton_pressed"]

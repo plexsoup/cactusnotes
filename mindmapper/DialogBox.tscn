@@ -1,18 +1,17 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://DialogBox.gd" type="Script" id=1]
 [ext_resource path="res://effects/Dialog.Typing.ogg" type="AudioStream" id=2]
-[ext_resource path="res://fonts/stickyNoteTheme.tres" type="Theme" id=3]
+[ext_resource path="res://fonts/architect-s-daughter/ArchitectsDaughter.ttf" type="DynamicFontData" id=3]
 [ext_resource path="res://fonts/LibreBaskerville-Regular.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://fonts/LibreBaskerville-Bold.ttf" type="DynamicFontData" id=5]
 [ext_resource path="res://fonts/LibreBaskerville-Italic.ttf" type="DynamicFontData" id=6]
 
 [sub_resource type="DynamicFont" id=1]
 
-size = 22
-outline_size = 1
-outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 4 )
+size = 32
+extra_spacing_char = 2
+font_data = ExtResource( 3 )
 
 [sub_resource type="Theme" id=2]
 
@@ -25,20 +24,16 @@ outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=4]
+[sub_resource type="Theme" id=4]
 
-size = 22
-outline_size = 1
-outline_color = Color( 0, 0, 0, 1 )
-font_data = ExtResource( 5 )
+default_font = SubResource( 3 )
 
 [sub_resource type="DynamicFont" id=5]
 
 size = 22
 outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
-use_mipmaps = true
-font_data = ExtResource( 6 )
+font_data = ExtResource( 4 )
 
 [sub_resource type="DynamicFont" id=6]
 
@@ -52,7 +47,20 @@ font_data = ExtResource( 5 )
 size = 22
 outline_size = 1
 outline_color = Color( 0, 0, 0, 1 )
-use_mipmaps = true
+font_data = ExtResource( 6 )
+
+[sub_resource type="DynamicFont" id=8]
+
+size = 22
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 5 )
+
+[sub_resource type="DynamicFont" id=9]
+
+size = 22
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 4 )
 
 [node name="DialogBox" type="Control"]
@@ -77,11 +85,11 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -424.5
+margin_left = -278.0
 margin_top = -150.0
-margin_right = 424.5
+margin_right = 425.0
 margin_bottom = 150.0
-theme = ExtResource( 3 )
+theme = SubResource( 2 )
 color = Color( 0.235294, 0.164706, 0.0196078, 0.772549 )
 
 [node name="DialogTextBox" type="RichTextLabel" parent="."]
@@ -89,18 +97,19 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -337.0
-margin_top = -83.0
-margin_right = 337.0
-margin_bottom = 83.0
-theme = SubResource( 2 )
-custom_fonts/mono_font = SubResource( 3 )
-custom_fonts/bold_italics_font = SubResource( 4 )
-custom_fonts/italics_font = SubResource( 5 )
-custom_fonts/bold_font = SubResource( 6 )
-custom_fonts/normal_font = SubResource( 7 )
+margin_left = -240.0
+margin_top = -114.0
+margin_right = 390.0
+margin_bottom = 116.0
+theme = SubResource( 4 )
+custom_fonts/mono_font = SubResource( 5 )
+custom_fonts/bold_italics_font = SubResource( 6 )
+custom_fonts/italics_font = SubResource( 7 )
+custom_fonts/bold_font = SubResource( 8 )
+custom_fonts/normal_font = SubResource( 9 )
 bbcode_enabled = true
 
 [connection signal="timeout" from="DialogTextLabel/LetterTimer" to="." method="_on_LetterTimer_timeout"]
 [connection signal="gui_input" from="ColorRect" to="." method="_on_ColorRect_gui_input"]
 [connection signal="gui_input" from="DialogTextBox" to="." method="_on_DialogTextBox_gui_input"]
+[connection signal="meta_clicked" from="DialogTextBox" to="." method="_on_DialogTextBox_meta_clicked"]

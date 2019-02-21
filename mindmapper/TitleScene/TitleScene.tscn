@@ -1,11 +1,27 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://TitleScene.gd" type="Script" id=1]
-[ext_resource path="res://scenery/dunes.jpg" type="Texture" id=2]
+[ext_resource path="res://TitleScene/waiting.png" type="Texture" id=2]
+[ext_resource path="res://scenery/dunes.jpg" type="Texture" id=3]
 
 [sub_resource type="Animation" id=1]
 
-resource_name = "launch"
+resource_name = "fadeIn"
+tracks/0/type = "value"
+tracks/0/path = NodePath("CanvasLayer/TextureRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0.00943749, 0.9 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=2]
+
 tracks/0/type = "value"
 tracks/0/path = NodePath("CanvasLayer/ColorRect:self_modulate")
 tracks/0/interp = 1
@@ -46,8 +62,16 @@ margin_top = -178.34
 margin_right = 1276.3
 margin_bottom = 758.66
 
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
+modulate = Color( 1, 1, 1, 0 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource( 2 )
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/launch = SubResource( 1 )
+anims/fadeIn = SubResource( 1 )
+anims/launch = SubResource( 2 )
 
 [node name="StartTimer" type="Timer" parent="."]
 wait_time = 3.0
@@ -64,6 +88,6 @@ margin_left = -5.0105
 margin_top = -106.892
 margin_right = 1077.99
 margin_bottom = 615.108
-texture = ExtResource( 2 )
+texture = ExtResource( 3 )
 expand = true
 

@@ -18,37 +18,49 @@ script = ExtResource( 2 )
 [node name="bgGUI" type="Node2D" parent="."]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="bgGUI"]
-editor/display_folded = true
 layer = -1
 
-[node name="TextureRect" type="TextureRect" parent="bgGUI/CanvasLayer"]
+[node name="ColorRect" type="ColorRect" parent="bgGUI/CanvasLayer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_bottom = 424.0
-texture = ExtResource( 3 )
-expand = true
+color = Color( 0, 0, 0, 1 )
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="bgGUI/CanvasLayer"]
 
+[node name="ParallaxLayer" type="ParallaxLayer" parent="bgGUI/CanvasLayer/ParallaxBackground"]
+motion_scale = Vector2( 0.25, 0.25 )
+motion_mirroring = Vector2( 40000, 40000 )
+
+[node name="TextureRect" type="TextureRect" parent="bgGUI/CanvasLayer/ParallaxBackground/ParallaxLayer"]
+margin_right = 40000.0
+margin_bottom = 40000.0
+texture = ExtResource( 3 )
+expand = true
+
 [node name="FarParallaxLayer" type="ParallaxLayer" parent="bgGUI/CanvasLayer/ParallaxBackground"]
 motion_scale = Vector2( 0.5, 0.5 )
+motion_mirroring = Vector2( 20000, 20000 )
 
-[node name="fog" type="Sprite" parent="bgGUI/CanvasLayer/ParallaxBackground/FarParallaxLayer"]
-self_modulate = Color( 1, 1, 1, 0.721569 )
-scale = Vector2( 21.2239, 18.0195 )
+[node name="fog" type="TextureRect" parent="bgGUI/CanvasLayer/ParallaxBackground/FarParallaxLayer"]
+self_modulate = Color( 1, 1, 1, 0.501961 )
+margin_right = 20000.0
+margin_bottom = 20000.0
+mouse_filter = 2
 texture = ExtResource( 4 )
-region_enabled = true
-region_rect = Rect2( 0, 0, 4096, 4096 )
+expand = true
 
 [node name="NearParallaxLayer2" type="ParallaxLayer" parent="bgGUI/CanvasLayer/ParallaxBackground"]
 motion_scale = Vector2( 0.75, 0.75 )
+motion_mirroring = Vector2( 10000, 10000 )
 
-[node name="dust" type="Sprite" parent="bgGUI/CanvasLayer/ParallaxBackground/NearParallaxLayer2"]
+[node name="dust" type="TextureRect" parent="bgGUI/CanvasLayer/ParallaxBackground/NearParallaxLayer2"]
+visible = false
 self_modulate = Color( 1, 1, 1, 0.25098 )
-scale = Vector2( 5, 5 )
+margin_right = 10000.0
+margin_bottom = 10000.0
+mouse_filter = 2
 texture = ExtResource( 5 )
-region_enabled = true
-region_rect = Rect2( 0, 0, 16384, 16384 )
+expand = true
 
 [node name="FirstNoteSpawnPoint" type="Position2D" parent="."]
 position = Vector2( -5.57306, 183.999 )
@@ -61,4 +73,4 @@ position = Vector2( -5.57306, 183.999 )
 
 [node name="CameraFocus" parent="." instance=ExtResource( 7 )]
 
-[connection signal="gui_input" from="bgGUI/CanvasLayer/TextureRect" to="." method="_on_TextureRect_gui_input"]
+[connection signal="gui_input" from="bgGUI/CanvasLayer/ColorRect" to="." method="_on_ColorRect_gui_input"]
